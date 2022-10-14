@@ -1,0 +1,68 @@
+html {
+    --gris: #6C6C6C;
+    --gris_clair: #989898;
+    --bleu: #297373;
+    --blanc: #ffff;
+    --fond: #faf1ed;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.btn {
+    background-color: var(--blanc);
+    color: var(--bleu);
+    text-decoration: none;
+    font-weight: 300;
+    font-size: 150%;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    width: max-content;
+    border: 0.2rem solid var(--bleu);
+    border-radius: 2rem;
+    padding: 0.4em 0.7em 0.4em 0.7em;
+    margin-right: 10vw;
+    transition: background-color ease-out 0.4s, color ease-out 0.4s;
+
+}
+
+.btn:hover{
+    background-color: var(--bleu);
+    color: var(--blanc);
+    transition: background-color ease-in 0.2s, color ease-in 0.2s;
+}
+
+header {
+    width: 100vw;
+    display: flex;
+    box-shadow: 0px -42px 10px 40px #111;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5vh;
+
+}
+
+footer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: var(--fond);
+    border-top: 7px solid var(--bleu);
+    row-gap: 1vh;
+    margin-top: 5vh;
+}
+
+.lienfooter{
+    color: var(--gris);
+    margin: 1vh 0 3vh 1vw;
+}
+
+.lienfooter:hover{
+    color: var(--gris_clair);
+}
+
+#copyright{
+    margin: 1vh 0 1vh 1vw;
+}
