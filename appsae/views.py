@@ -28,3 +28,7 @@ def index(request):
 
 def html(request):
     return render(request, 'appsae/register.html')
+
+
+def html2(request):
+    return render(request,'appsae/login.html')

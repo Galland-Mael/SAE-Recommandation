@@ -71,24 +71,26 @@ secNext.addEventListener('click', () => {
         showCLassTimer(failInfo[5], 2000, "none");
     }
     if ((/^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/.test(mail.value))) {
-    if (/^[\w$@%*+\-_!]{8,15}$/.test((pwd1.value))) {
-        if (pwd1.value == pwd2.value) {
-            failInfo[5].classList.add('none');
-            slidePage.style.marginLeft = "-50%";
-            circle[current - 1].classList.add("active");
-            progressCheck[current - 1].classList.add("active");
-            progressText[current - 1].classList.add("active");
-            current += 1;
+        if (/^[\w$@%*+\-_!]{8,15}$/.test((pwd1.value))) {
+            if (pwd1.value == pwd2.value) {
+                failInfo[5].classList.add('none');
+                slidePage.style.marginLeft = "-50%";
+                circle[current - 1].classList.add("active");
+                progressCheck[current - 1].classList.add("active");
+                progressText[current - 1].classList.add("active");
+                current += 1;
+            } else {
+                showCLassTimer(failInfo[5], 2000, "none")
+            }
         } else {
-            showCLassTimer(failInfo[5], 2000, "none")
+            showCLassTimer(failInfo[4], 2000, "none");
         }
-    } else {
-        showCLassTimer(failInfo[4], 2000, "none");
-    }
-    } else {
-         failInfo[3].textContent = "*Adresse mail introuvable";
-         showCLassTimer(failInfo[3], 2000, "none");
-    }
+    }else
+        {
+            failInfo[3].textContent = "*Adresse mail introuvable";
+            showCLassTimer(failInfo[3], 2000, "none");
+        }
+
 })
 
 thirdNext.addEventListener('click', () => {
