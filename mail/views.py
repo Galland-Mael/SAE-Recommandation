@@ -9,7 +9,7 @@ def verif_email(request):
         "Code de vérification :\n"
         + "         " + random_value()
         + "\n\nL'équipe EatAdvisor",
-        "eat_advisor2@outlook.fr",
+        "eat_advisor3@outlook.fr",
         ["matteo.miguelez@gmail.com"],
         fail_silently=False);
     except:
