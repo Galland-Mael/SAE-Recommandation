@@ -1,0 +1,34 @@
+{% load modulo %}
+<div class="comment margin-auto">
+    {% for element in avis %}
+
+        {% if forloop.counter|modulo:'2' != 0 %}
+            <div class="flex margin-bottom">
+        {% endif %}
+
+    <div class="avis-border flex column ">
+        <div class="card-avis flex">
+            <div class="card-user-container flex">
+                <div class="card-img-container flex ">
+                    <img class="img" src="{{ element.adherant_fk.profile_picture.url }}" alt="marche pas">
+                </div>
+            </div>
+            <div class="flex column">
+
+
+                <span class="avis-user-name flex">{{ element.adherant_fk.prenom }}</span>
+                <div class="note-restaurant flex">
+                    <span>Note : {{ element.note }}</span>
+                    <div class="star-icon">
+                        <box-icon type='solid' color="#ffb503" ; name='star'></box-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="avis-text flex">{{ element.texte }}</span>
+    </div>
+    {% if forloop.counter|modulo:'2' == 0 %}
+        </div>
+    {% endif %}
+    {% endfor %}
+</div>

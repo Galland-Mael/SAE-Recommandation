@@ -98,38 +98,51 @@
 
         <div class="avis-container">
         {% if mail %}
-        <div class="add-avis-container title2">Ajouter un avis</div>
-        <form action="{% url 'addCommentaires' element.pk %}" method="post">
-            {% csrf_token %}
-            <div class="note-container">
-                <label for="rating">Note : </label>
-                <div class="radio-container">
-                    <input type="radio" name="title-rating" id="rating10" value="5"><label for="rating10"
-                                                                                           title="5"></label>
-                    <input type="radio" name="title-rating" id="rating9" value="4.5"><label for="rating9" title="4.5"
-                                                                                            class="half"></label>
-                    <input type="radio" name="title-rating" id="rating8" value="4"><label for="rating8"
-                                                                                          title="4"></label>
-                    <input type="radio" name="title-rating" id="rating7" value="3.5"><label for="rating7" title="3.5"
-                                                                                            class="half"></label>
-                    <input type="radio" name="title-rating" id="rating6" value="3"><label for="rating6"
-                                                                                          title="3"></label>
-                    <input type="radio" name="title-rating" id="rating5" value="2.5"><label for="rating5" title="2.5"
-                                                                                            class="half"></label>
-                    <input type="radio" name="title-rating" id="rating4" value="2"><label for="rating4"
-                                                                                          title="2"></label>
-                    <input type="radio" name="title-rating" id="rating3" value="1.5"><label for="rating3" title="1.5"
-                                                                                            class="half"></label>
-                    <input type="radio" name="title-rating" id="rating2" value="1"><label for="rating2"
-                                                                                          title="1"></label>
-                    <input type="radio" name="title-rating" id="rating1" value="0.5"/><label for="rating1" title="0.5"
-                                                                                             class="half"></label>
+            {% if commentaire %}
+                <div class="title2">Modifier votre avis</div>
+            {% else %}
+                <div class="title2">Ajouter un avis</div>
+            {% endif %}
+            <form action="{% url 'addCommentaires' element.pk %}" method="post">
+                {% csrf_token %}
+                <div class="note-container">
+                    <label for="rating">Note : </label>
+                    <div class="radio-container">
+                        <input type="radio" name="title-rating" id="rating10" value="5"><label for="rating10"
+                                                                                               title="5"></label>
+                        <input type="radio" name="title-rating" id="rating9" value="4.5"><label for="rating9"
+                                                                                                title="4.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating8" value="4"><label for="rating8"
+                                                                                              title="4"></label>
+                        <input type="radio" name="title-rating" id="rating7" value="3.5"><label for="rating7"
+                                                                                                title="3.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating6" value="3"><label for="rating6"
+                                                                                              title="3"></label>
+                        <input type="radio" name="title-rating" id="rating5" value="2.5"><label for="rating5"
+                                                                                                title="2.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating4" value="2"><label for="rating4"
+                                                                                              title="2"></label>
+                        <input type="radio" name="title-rating" id="rating3" value="1.5"><label for="rating3"
+                                                                                                title="1.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating2" value="1"><label for="rating2"
+                                                                                              title="1"></label>
+                        <input type="radio" name="title-rating" id="rating1" value="0.5"/><label for="rating1"
+                                                                                                 title="0.5"
+                                                                                                 class="half"></label>
+                    </div>
                 </div>
-            </div>
-            <label for="comments">commentaire</label>
-            <input type="text" name="comm">
-            <button type="submit">Ajouter</button>
-        </form>
+                <label for="comments">commentaire</label>
+                <input type="text" name="comm">
+                {% if commentaire %}
+                    <button class="avis-btn" type="submit">Modifier</button>
+                {% else %}
+                    <button class="avis-btn" type="submit">Ajouter</button>
+                {% endif %}
+            </form>
             <div class="separator avis-separator"></div>
         {% endif %}
     {% endfor %}
@@ -143,7 +156,7 @@
 
 
 
-     <!-- afficher les avis -->
+    <!-- afficher les avis -->
 
 
     <div class="comment margin-auto">
@@ -153,25 +166,25 @@
                 <div class="flex margin-bottom">
             {% endif %}
 
-            <div class="avis-border flex column ">
-        <div class="card-avis flex">
-            <div class="card-user-container flex">
-                <div class="card-img-container flex ">
-                    <img class="img" src="{{ element.adherant_fk.profile_picture.url }}" alt="marche pas">
+        <div class="avis-border flex column ">
+            <div class="card-avis flex">
+                <div class="card-user-container flex">
+                    <div class="card-img-container flex ">
+                        <img class="img" src="{{ element.adherant_fk.profile_picture.url }}" alt="marche pas">
+                    </div>
                 </div>
-            </div>
-            <div class="flex column">
+                <div class="flex column">
 
 
-                <span class="avis-user-name flex">{{ element.adherant_fk.prenom }}</span>
-                <div class="note-restaurant flex">
-                    <span>Note : {{ element.note }}</span>
-                    <div class="star-icon">
-                        <box-icon type='solid' color="#ffb503" ; name='star'></box-icon>
+                    <span class="avis-user-name flex">{{ element.adherant_fk.prenom }}</span>
+                    <div class="note-restaurant flex">
+                        <span>Note : {{ element.note }}</span>
+                        <div class="star-icon">
+                            <box-icon type='solid' color="#ffb503" ; name='star'></box-icon>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
             <span class="avis-text flex">{{ element.texte }}</span>
         </div>
         {% if forloop.counter|modulo:'2' == 0 %}
@@ -179,6 +192,22 @@
         {% endif %}
         {% endfor %}
     </div>
+
+
+
+    {% for element in restaurant %}
+        {% if not endAvis %}
+        <div id="container-voir-plus-result"></div>
+        <div class="voir-plus-container">
+            <button class="voir-plus-btn"
+                    hx-get="{% url 'addAvis' element.pk %}"
+                    hx-trigger="click"
+                    hx-target="#container-voir-plus-result"
+            >voir plus
+            </button>
+        </div>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
 {% block footer %}
     {% include "source/footer.html" %}

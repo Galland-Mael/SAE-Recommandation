@@ -1,5 +1,5 @@
 from appsae.model.models import *
-
+from appsae.gestion import *
 def ajoutAvis(user, restaurant, note, avis = ""):
     """ Ajout d'un avis à la base de données,
     Renvoie true s'il a été ajouté, false sinon
@@ -79,3 +79,16 @@ def avisUser(restaurant, user, num = 0):
         if item != avis_user[0]:
             list_avis.append(item)
     return list_avis
+
+
+def updateAvis(user, restaurant, note, avis):
+    """ Mise à jour de l'avis de l'utilisateur user sur le restaurant
+
+    @param user: l'utilisateur
+    @param restaurant: le restaurant
+    @param note: la nouvelle note
+    @param avis: le nouvel avis
+    @return: /
+    """
+    if (avisExist(user, restaurant)):
+        Avis.objects.filter(adherant_fk=user, restaurant_fk=restaurant).update(note=note, texte=avis)

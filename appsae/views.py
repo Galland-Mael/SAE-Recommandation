@@ -72,8 +72,9 @@ def login(request):
 
 def index(request):
     context = {
-        'list': carrousel()
+        'list': listeAffichageCaroussel()
     }
+    connect(request, context)
     return render(request, 'index/index.html', context)
 
 
@@ -116,26 +117,23 @@ def logoutUser(request):
 
 
 def search(request):
-    print("kerkekeke")
     if request.GET["search"] != "":
-        restaurants = Restaurant.objects.filter(nom__icontains=request.GET["search"])[:3]
         context = {
-            'restaurants': restaurants
+            'restaurants': Restaurant.objects.filter(nom__icontains=request.GET["search"])[:3]
         }
         return render(request, 'restaurants/searchRestaurants.html', context)
     return HttpResponse('')
 
 
 def vueRestaurant(request, pk):
-    restaurant = Restaurant.objects.filter(pk=pk)
-    imgRestaurants = ImageRestaurant.objects.filter(idRestaurant=pk)
-    avis = Avis.objects.filter(restaurant_fk=restaurant[0]);
     context = {
-        'restaurant': restaurant,
-        'imgRestaurants': imgRestaurants,
-        'avis': avis
+        'restaurant': Restaurant.objects.filter(pk=pk),
+        'imgRestaurants': ImageRestaurant.objects.filter(idRestaurant=pk),
+        'avis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk))[:10]
     }
-    connect(request,context),
+    connect(request, context),
+    if 'mailUser' in request.session:
+        context['commentaire'] = True
     return render(request, 'restaurants/vueRestaurant.html', context)
 
 
@@ -143,23 +141,20 @@ def addCommentaires(request, pk):
     context = {
         'restaurant': Restaurant.objects.filter(pk=pk),
         'imgRestaurants': ImageRestaurant.objects.filter(idRestaurant=pk),
-        'avis': Avis.objects.filter(restaurant_fk=restaurant[0]),
+        'avis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk)),
     }
-
-
+    if 'mailUser' in request.session:
+        context['commentaire'] = True
     if (request.method == 'POST' and 'title-rating' in request.POST and 'comm' in request.POST):
-        ajoutAvis(Adherant.objects.get(mail=request.session['mailUser']), Restaurant.objects.filter(pk=pk), request.POST['title-rating'], request.POST['comm'])
-        context = {
-            'restaurant': restaurant,
-            'imgRestaurants': imgRestaurants,
-            'avis': avis,
-            'mail': user.mail,
-            'photo': user.profile_picture.url,
-        }
+        ajoutAvis(Adherant.objects.get(mail=request.session['mailUser']), Restaurant.objects.get(pk=pk),
+                  request.POST['title-rating'],
+                  request.POST['comm'])
+        updateAvis(Adherant.objects.get(mail=request.session['mailUser']), Restaurant.objects.get(pk=pk),
+                   request.POST['title-rating'], request.POST['comm'])
     else:
         del messages
         messages.success(request, 'Les deux champs doivent être remplis.')
-    connect(request,context)
+    connect(request, context)
     return render(request, 'restaurants/vueRestaurant.html', context)
 
 
@@ -187,3 +182,11 @@ def export_ratings(request):
         f.write('\n')
     print(file)
     return redirect('index')
+
+
+def addAvis(request, pk):
+    context = {
+        'avis': liste_avis(Restaurant.objects.get(pk=pk), 1)
+    }
+    connect(request, context)
+    return render(request, 'avis/moreAvis.html',context)

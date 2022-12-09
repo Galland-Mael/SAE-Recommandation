@@ -275,3 +275,20 @@ input:checked ~ label, label:hover ~ label {
 .margin-auto{
     margin:auto ;
 }
+
+.voir-plus-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.voir-plus-btn{
+    border-radius: 20px;
+    width: 65px;
+    height: 28px;
+    border: solid 2px var(--bleu);
+    color: var(--bleu);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
