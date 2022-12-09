@@ -4,6 +4,7 @@ import sqlite3
 import csv
 from sqlite3 import OperationalError
 import os, tempfile, zipfile, mimetypes
+from urllib.request import Request
 from wsgiref.util import FileWrapper
 from django.conf import settings
 from django.utils.dateformat import format
@@ -27,6 +28,8 @@ import time
 from surprise import KNNBasic
 from surprise import Dataset
 from surprise import Reader
+
+from .test import StreamJson
 
 PAGE = 0
 
@@ -78,6 +81,8 @@ def login(request):
 
 
 def index(request):
+    #inserttype()
+    insertresto()
     liste = carrousel();
     return render(request, 'index/index.html', {'list': liste})
 
@@ -205,3 +210,102 @@ def export_ratings(request):
         f.write('\n')
     print(file)
     return redirect('index')
+
+def split_string(string):
+    # Split the string based on space delimiter
+    list_string = string.split(',')
+
+    return list_string
+
+def insertresto():
+    url = "https://qghub.cloud/assets/yelp_business.json"
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    verif = 0
+
+    # read json from url in stream
+    for obj in StreamJson(req):
+        verif += 1
+        check = False
+        categories = obj.get('categories')
+        city = obj.get('city')
+        if city.lower() == "indianapolis" and categories is not None:
+            liste = split_string(categories)
+            size = len(liste)
+            for i in range(size):
+                if i != 0:  # test pour suppression de l'espace devant la chaine
+                    alias = liste[i][1:]
+                    liste[i] = alias
+                else:
+                    alias = liste[i]
+                if alias.lower() == "restaurants":
+                    check = True
+
+        if check == True:
+            id_yelp = obj.get('business_id')
+            name = obj.get('name')
+            address = obj.get('address')
+            zip_code = obj.get('postal_code')
+            state = obj.get('state')
+            latitude = obj.get('latitude')
+            longitude = obj.get('longitude')
+            rating = obj.get('stars')
+            nb_review = obj.get('review_count')
+
+            restaurant = Restaurant(id_yelp=id_yelp, nom=name, adresse=address, ville=city, zip_code=zip_code,
+                                    etat=state, latitude=latitude, longitude=longitude,
+                                    note=rating, nb_review=nb_review)
+            restaurant.save()
+
+            liste.remove('Restaurants')
+            try:
+                liste.remove('Food')
+            except:
+                print('no food')
+
+            nb = len(liste)
+            for a in range(nb):
+                alias = liste[a]
+                tmp = RestaurantType.objects.filter(nom=alias)
+                if tmp:
+                    restaurant.type.add(tmp[0])
+    print(verif)
+
+def inserttype():
+    url = "https://qghub.cloud/assets/yelp_business.json"
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    verif = 0
+
+    # read json from url in stream
+    for obj in StreamJson(req):
+        verif += 1
+        check = False
+        categories = obj.get('categories')
+        city = obj.get('city')
+        if city.lower() == "indianapolis" and categories is not None:
+            liste = split_string(categories)
+            size = len(liste)
+            for i in range(size):
+                if i != 0:  # test pour suppression de l'espace devant la chaine
+                    alias = liste[i][1:]
+                else:
+                    alias = liste[i]
+                if alias.lower() == "restaurants":
+                    check = True
+
+            if check:
+                for j in range(size):
+                    if j != 0:  # test pour suppression de l'espace devant la chaine
+                        alias = liste[j][1:]
+                        nb = RestaurantType.objects.filter(nom=alias).count()
+                        if nb == 0:
+                            b = RestaurantType(nom=alias)
+                            b.save()
+                    else:
+                        alias = liste[j]
+                        nb = RestaurantType.objects.filter(nom=alias).count()
+                        if nb == 0:
+                            b = RestaurantType(nom=alias)
+                            b.save()
+    print(verif)
+    RestaurantType.objects.filter(nom="Restaurants").delete()
+    RestaurantType.objects.filter(nom="Food").delete()

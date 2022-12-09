@@ -1,28 +1,68 @@
-import requests
+from urllib.request import urlopen, Request
 import json
+# add async await
+import asyncio
+# add thread
+import threading
 
-# Define a business ID
-category_alias = 'hotdogs'
 
-# Define API Key, Search Type, and header
-MY_API_KEY = 'yrzAjuWxX9PQzxXL1om7yRlmDV2wb45YoBNbLim5Vd2dBvknXfxVoj-ISRFmhi76RQWqAfybNV3N6vG5u_CjUI63A' \
-             '-gev2jmG5bMEyWW7GoxPfd6YFKsHdL3tphSY3Yx '
-BUSINESS_PATH = 'https://api.yelp.com/v3/businesses/search'
-HEADERS = {'Authorization': 'Bearer ' + MY_API_KEY}
+url = "https://qghub.cloud/assets/yelp_business.json"
 
-# Define the Parameters of the search
-PARAMETERS = {'location':'San Diego',
-              'limit':10,
-              'offset': 0}
+req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
 
-# Make a Request to the API, and return results
-response = requests.get(url=BUSINESS_PATH,
-                        params=PARAMETERS,
-                        headers=HEADERS)
 
-# Convert response to a JSON String
-business_data = response.json()
+# class to read json from url in stream
+class StreamJson:
+    def __init__(self, url):
+        # with fake user agent
+        self.stream = urlopen(url)
+        self.decoder = json.JSONDecoder()
 
-f = open('.\\result.txt','w')
-f.write(json.dumps(business_data, indent=3))
-f.close()
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            try:
+                return self.decoder.raw_decode(self.stream.readline().decode())[0]
+            except ValueError:
+                continue
+
+# def split_string(string):
+#     # Split the string based on space delimiter
+#     list_string = string.split(',')
+#
+#     return list_string
+#
+# verif=0
+# for obj in StreamJson(req):
+#     check=False
+#     verif += 1
+#     categories = obj.get('categories')
+#     city = obj.get('city')
+#     liste = split_string(categories)
+#     size = len(liste)
+#     if city.lower() == "indianapolis" and categories is not None:
+#         for i in range(size):
+#             if i != 0:  # test pour suppression de l'espace devant la chaine
+#                 alias = liste[i][1:]
+#                 liste[i] = alias
+#             else:
+#                 alias = liste[i]
+#             if alias.lower() == "restaurants":
+#                 check = True
+#
+#         if check == True:
+#             liste.remove('Restaurants')
+#             try:
+#                 liste.remove('Food')
+#             except:
+#                 print('no food')
+#             print(type(liste))
+#             size = len(liste)
+#             for j in range(size):
+#                 if j != 0:  # test pour suppression de l'espace devant la chaine
+#                     print(liste[j] + ' ' + str(j))
+#     verif += 1
+#     if verif==400:
+#         exit()
