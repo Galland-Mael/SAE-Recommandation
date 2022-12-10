@@ -82,7 +82,10 @@ def login(request):
 
 def index(request):
     #inserttype()
-    insertresto()
+    #insertresto()
+    #insertuser()
+    #Restaurant.objects.all().delete()
+    #Adherant.objects.all().delete()
     liste = carrousel();
     return render(request, 'index/index.html', {'list': liste})
 
@@ -265,7 +268,7 @@ def insertresto():
             nb = len(liste)
             for a in range(nb):
                 alias = liste[a]
-                tmp = RestaurantType.objects.filter(nom=alias)
+                tmp = RestaurantType.objects.filter(nom=alias.lower())
                 if tmp:
                     restaurant.type.add(tmp[0])
     print(verif)
@@ -296,16 +299,34 @@ def inserttype():
                 for j in range(size):
                     if j != 0:  # test pour suppression de l'espace devant la chaine
                         alias = liste[j][1:]
-                        nb = RestaurantType.objects.filter(nom=alias).count()
+                        nb = RestaurantType.objects.filter(nom=alias.lower()).count()
                         if nb == 0:
-                            b = RestaurantType(nom=alias)
+                            b = RestaurantType(nom=alias.lower())
                             b.save()
                     else:
                         alias = liste[j]
-                        nb = RestaurantType.objects.filter(nom=alias).count()
+                        nb = RestaurantType.objects.filter(nom=alias.lower()).count()
                         if nb == 0:
-                            b = RestaurantType(nom=alias)
+                            b = RestaurantType(nom=alias.lower())
                             b.save()
     print(verif)
-    RestaurantType.objects.filter(nom="Restaurants").delete()
-    RestaurantType.objects.filter(nom="Food").delete()
+    RestaurantType.objects.filter(nom="restaurants").delete()
+    RestaurantType.objects.filter(nom="food").delete()
+
+def insertuser():
+    url = "https://qghub.cloud/assets/yelp.json"
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    verif = 0
+
+    # read json from url in stream
+    for obj in StreamJson(req):
+        verif += 1
+        nb_review = obj.get('review_count')
+        if nb_review >= 20:
+            id_yelp = obj.get('user_id')
+            prenom = obj.get('name')
+            nb_review = obj.get('review_count')
+
+            user = Adherant(id_yelp=id_yelp, prenom=prenom, nom='',mail='',password='',pseudo='', nb_review=nb_review)
+            user.save()
+        print('iteration' + str(verif))

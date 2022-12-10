@@ -13,7 +13,6 @@ class Adherant(models.Model):
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
     mail = models.EmailField(max_length=254)
-    prenom = models.CharField(max_length=50)
     birthDate = models.DateField("Date", default=datetime.date.today())
     pseudo = models.CharField(max_length=20)
     nb_review = models.IntegerField(default=0)
@@ -21,7 +20,7 @@ class Adherant(models.Model):
     profile_picture = models.ImageField(default='img_user/avatar.jpeg', upload_to='img_user/')
 
     def __str__(self):
-        return self.mail
+        return str(self.prenom) + ' - ' + str(self.id_yelp)
 
 
 class Groupe(models.Model):
