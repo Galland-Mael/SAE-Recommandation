@@ -127,4 +127,7 @@ body {
 .hover:hover {
     background-color: #dadada;
 }
-
+box-icon{
+        width: 15px;
+    height: 15px;
+}

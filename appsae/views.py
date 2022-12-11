@@ -119,7 +119,7 @@ def logoutUser(request):
 def search(request):
     if request.GET["search"] != "":
         context = {
-            'restaurants': Restaurant.objects.filter(nom__icontains=request.GET["search"])[:3]
+            'restaurants': Restaurant.objects.filter(nom__icontains=request.GET["search"]).order_by('-note')[:3]
         }
         return render(request, 'restaurants/searchRestaurants.html', context)
     return HttpResponse('')
@@ -129,7 +129,8 @@ def vueRestaurant(request, pk):
     context = {
         'restaurant': Restaurant.objects.filter(pk=pk),
         'imgRestaurants': ImageRestaurant.objects.filter(idRestaurant=pk),
-        'avis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk))[:10]
+        'avis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk))[:10],
+        'nbAvis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk)),
     }
     connect(request, context),
     if 'mailUser' in request.session:
@@ -152,7 +153,6 @@ def addCommentaires(request, pk):
         updateAvis(Adherant.objects.get(mail=request.session['mailUser']), Restaurant.objects.get(pk=pk),
                    request.POST['title-rating'], request.POST['comm'])
     else:
-        del messages
         messages.success(request, 'Les deux champs doivent être remplis.')
     connect(request, context)
     return render(request, 'restaurants/vueRestaurant.html', context)
@@ -184,9 +184,9 @@ def export_ratings(request):
     return redirect('index')
 
 
-def addAvis(request, pk):
+def voirPlus(request, pk):
     context = {
         'avis': liste_avis(Restaurant.objects.get(pk=pk), 1)
     }
     connect(request, context)
-    return render(request, 'avis/moreAvis.html',context)
+    return render(request, 'avis/moreAvis.html', context)

@@ -4,7 +4,7 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/header-footer.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/vueRestaurant.css' %}"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 {% endblock %}
 {% block header %}
     {% include "source/header.html" %}
@@ -24,7 +24,7 @@
                         </div>
                         <a href="#t">
                             <div class="nav-commentaire flex">
-                                <div>{{ avis|length }} </div>
+                                <div>{{ nbAvis|length }}</div>
                                 <div class="nav-commentaire-title margin-right">Commentaire{{ avis|pluralize }} </div>
                             </div>
                         </a>
@@ -149,7 +149,7 @@
 
 <div class="avis-title-container">
     <div class="avis-title bottom-space title2" id="commentaires">Commentaire{{ avis|pluralize }} </div>
-    <div class="nb-commentaire title2">({{ avis|length }})</div>
+    <div class="nb-commentaire title2">({{ nbAvis|length }})</div>
 </div>
 <div class="separator avis-separator"></div>
 </div>
@@ -199,12 +199,12 @@
         {% if not endAvis %}
         <div id="container-voir-plus-result"></div>
         <div class="voir-plus-container">
-            <button class="voir-plus-btn"
-                    hx-get="{% url 'addAvis' element.pk %}"
+            <div class="voir-plus-btn"
+                    hx-get="{% url 'voirPlus' element.pk %}"
                     hx-trigger="click"
                     hx-target="#container-voir-plus-result"
             >voir plus
-            </button>
+            </div>
         </div>
         {% endif %}
     {% endfor %}

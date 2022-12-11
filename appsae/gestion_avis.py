@@ -1,6 +1,8 @@
 from appsae.model.models import *
 from appsae.gestion import *
-def ajoutAvis(user, restaurant, note, avis = ""):
+
+
+def ajoutAvis(user, restaurant, note, avis=""):
     """ Ajout d'un avis à la base de données,
     Renvoie true s'il a été ajouté, false sinon
 
@@ -10,11 +12,12 @@ def ajoutAvis(user, restaurant, note, avis = ""):
     @param avis: l'avis de l'utlisateur sur le restaurant
     @return: un booléen en fonction de si l'avis à été ajouté à la base de données ou non
     """
-    if (avisExist(user,restaurant)):
+    if (avisExist(user, restaurant)):
         return False
     avis = Avis(adherant_fk=user, restaurant_fk=restaurant, note=note, texte=avis)
     avis.save()
     return True
+
 
 def avisExist(user, restaurant):
     """ Vérifie si l'utilisateur user a déjà ajouté un avis sur le restaurant
@@ -26,6 +29,7 @@ def avisExist(user, restaurant):
     if Avis.objects.filter(restaurant_fk=restaurant, adherant_fk=user).count() == 0:
         return False
     return True
+
 
 def afficherAvisUser(user, restaurant):
     """ Renvoie l'avis de l'utilisateur s'il existe
@@ -49,15 +53,16 @@ def liste_avis(restaurant, num):
     """
     avis = Avis.objects.filter(restaurant_fk=restaurant)
     taille = avis.count()
-    taille_liste= 10 # Taille de la liste à prendre
-    if taille < num*taille_liste:
+    taille_liste = 10  # Taille de la liste à prendre
+    if taille < num * taille_liste:
         return []
-    elif taille >= (num + 1) *taille_liste:
-        return avis[num*taille_liste:(num + 1)*taille_liste]
-    elif taille < (num +1 ) *taille_liste:
-        return avis[num*taille_liste:taille]
+    elif taille >= (num + 1) * taille_liste:
+        return avis[num * taille_liste:(num + 1) * taille_liste]
+    elif taille < (num + 1) * taille_liste:
+        return avis[num * taille_liste:taille]
 
-def avisUser(restaurant, user, num = 0):
+
+def avisUser(restaurant, user, num=0):
     """ Renvoie la liste des avis 10 par 10,
     sauf si un des avis appartient à l'utilisateur user,
     dans ce cas, il renvoie seulement 9 avis.
@@ -92,3 +97,26 @@ def updateAvis(user, restaurant, note, avis):
     """
     if (avisExist(user, restaurant)):
         Avis.objects.filter(adherant_fk=user, restaurant_fk=restaurant).update(note=note, texte=avis)
+
+
+def listeAffichageAvis(restaurant, user, num=0):
+    """ Renvoie une liste d'avis 10 par 10 ne contenant pas l'avis de l'utilisateur user,
+    si num vaut 0, on renvoie de 0 à 9 dans la liste des avis, etc...
+    @param restaurant: le restaurant
+    @param user: l'utilisateur
+    @param num: le numéro de la page
+    @return: une liste (QuerySet) d'avis
+    """
+    taille_list = 2
+    avis = Avis.objects.filter(restaurant_fk=restaurant).exclude(adherant_fk=user)
+    return avis[numtaille_list:(num + 1) * taille_list]
+
+    def afficherVoirPlus(restaurant, user, num):
+        """Renvoie true s'il faut afficher le bouton "Voir Plus", false sinon
+
+        @param restaurant: le restaurant concerné
+        @param user: l'utilisateur concerné
+        @param num: le numéro de la page actuelle
+        @return: booléen en fonction de s'il faut afficher ou non "Voir Plus"
+        """
+        return listeAffichageAvis(restaurant, user, num + 1).count() != 0

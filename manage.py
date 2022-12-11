@@ -16,7 +16,7 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-    #send_mail("test","test","eatadvisor@outlook.com", ["matteo.miguelez@gmail.com"])
+    
     print("test")
 
 if __name__ == '__main__':
