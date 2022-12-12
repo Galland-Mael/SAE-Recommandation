@@ -268,6 +268,9 @@ input:checked ~ label, label:hover ~ label {
 .card-avis {
     margin-bottom: 10px;
 }
+.hidden{
+    visibility: hidden;
+}
 
 .none {
     display: none;

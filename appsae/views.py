@@ -186,7 +186,9 @@ def export_ratings(request):
 
 def voirPlus(request, pk):
     context = {
-        'avis': liste_avis(Restaurant.objects.get(pk=pk), 1)
+        'avis': listeAffichageAvis(Restaurant.objects.get(pk=pk), 1),
     }
-    connect(request, context)
+    if (afficherVoirPlus(Restaurant.objects.get(pk=pk), 1)):
+        context['endAvis'] = True
+    print(afficherVoirPlus(Restaurant.objects.get(pk=pk), 0))
     return render(request, 'avis/moreAvis.html', context)
