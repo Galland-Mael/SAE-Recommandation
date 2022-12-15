@@ -201,14 +201,24 @@ def voirPlus(request, pk):
 
 def traitementModifUser(request):
     user = Adherant.objects.get(mail=request.session['mailUser'])
-    print(request.POST)
-    updatePrenomUser(user.mail,request.POST['prenom'])
-    updateNomUser(user.mail,request.POST['nom'])
-    #updateDateUser(user.mail,request.POST['birthDate'])
-    if(request.POST['password']!=" "):
+    if( request.POST['prenom']!=""):
+        updatePrenomUser(user.mail, request.POST['prenom'])
+    if (request.POST['nom'] != ""):
+        updateNomUser(user.mail, request.POST['nom'])
+    # if(request.FILES != ""):
+    # updateProfilPick(user.mail,request.FILES['photo'])
+    # updateDateUser(user.mail,request.POST['birthDate'])
+    if (request.POST['password'] != " "):
         updateMdpUser(user.mail, request.POST['password'])
     context = {
-        'list':listeAffichageCaroussel()
+        'list': listeAffichageCaroussel()
     }
-    connect(request,context)
+    connect(request, context)
     return render(request, 'index/index.html', context)
+
+
+def groupes(request):
+
+    context = {
+
+    }

@@ -12,7 +12,7 @@
 
 {% block main %}
     <div class="search-container">
-        <form action="{% url 'index' %}" method="POST" class="post-form form">
+        <form action="{% url 'groupes' %}" method="POST" class="post-form form">
             {% csrf_token %}
             <div class="search">
                 <input class="searchTerm" type="text" name="search"
@@ -29,12 +29,14 @@
         </form>
         <div class="result-container">
             <div id="search-results">
-
             </div>
         </div>
     </div>
 
     <div class="glider-contain">
+        <div class="title">
+        <span class="title-text">les mieux notés :</span>
+        </div>
         <div class="glider">
             {% for element in list %}
                 <div class="card">

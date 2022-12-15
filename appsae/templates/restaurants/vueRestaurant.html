@@ -98,11 +98,7 @@
 
         <div class="avis-container">
         {% if mail %}
-            {% if commentaire %}
-                <div class="title2">Modifier votre avis</div>
-            {% else %}
                 <div class="title2">Ajouter un avis</div>
-            {% endif %}
             <form action="{% url 'addCommentaires' element.pk %}" method="post">
                 {% csrf_token %}
                 <div class="note-container">
@@ -137,11 +133,7 @@
                 </div>
                 <label for="comments">commentaire</label>
                 <input type="text" name="comm">
-                {% if commentaire %}
-                    <button class="avis-btn" type="submit">Modifier</button>
-                {% else %}
-                    <button class="avis-btn" type="submit">Ajouter</button>
-                {% endif %}
+                <button class="avis-btn" type="submit">Ajouter</button>
             </form>
             <div class="separator avis-separator"></div>
         {% endif %}
@@ -159,7 +151,7 @@
     <!-- afficher les avis -->
 
 
-   <div class="comment margin-auto">
+    <div class="comment margin-auto">
         {% for element in avis %}
 
             {% if forloop.counter|modulo:'2' != 0 %}
@@ -194,7 +186,7 @@
     </div>
     {% for element in restaurant %}
         {% if not endAvis %}
-        <div id="container-voir-plus-result"></div>
+            <!-- <div id="container-voir-plus-result"></div>
         <div class="voir-plus-container">
             <div class="voir-plus-btn"
                     hx-get="{% url 'voirPlus' element.pk %}"
@@ -202,7 +194,7 @@
                     hx-target="#container-voir-plus-result"
             >voir plus
             </div>
-        </div>
+        </div> -->
         {% endif %}
     {% endfor %}
 
