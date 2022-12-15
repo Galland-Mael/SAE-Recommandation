@@ -66,3 +66,6 @@ class StreamJson:
 #     verif += 1
 #     if verif==400:
 #         exit()
+
+for i in range (5):
+    print(i)

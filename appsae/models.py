@@ -95,17 +95,10 @@ class Horaire(models.Model):
 
 class Avis(models.Model):
     note = models.FloatField(validators=[MaxValueValidator(5), MinValueValidator(0)],default=0)
-    texte = models.CharField(max_length=1000, default=" ")
-    created_date = models.DateTimeField(default=datetime.datetime.now(), blank=True)
-    unix_date = models.CharField(max_length=1000, default="")
+    texte = models.CharField(max_length=3000, default=" ")
+    unix_date = models.CharField(max_length=1000, default=datetime.datetime.timestamp(datetime.datetime.now()))
     restaurant_fk = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     adherant_fk = models.ForeignKey(Adherant, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'Avis'
-        constraints = [
-            models.UniqueConstraint(fields=['restaurant_fk', 'adherant_fk'], name='unique avis')
-        ]
 
     def __str__(self):
         return str(self.restaurant_fk) + " - " + str(self.adherant_fk)

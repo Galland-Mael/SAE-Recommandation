@@ -86,6 +86,8 @@ def index(request):
     #insertuser()
     #Restaurant.objects.all().delete()
     #Adherant.objects.all().delete()
+    #Avis.objects.all().delete()
+    #insertreview()
     liste = carrousel();
     return render(request, 'index/index.html', {'list': liste})
 
@@ -231,7 +233,7 @@ def insertresto():
         check = False
         categories = obj.get('categories')
         city = obj.get('city')
-        if city.lower() == "indianapolis" and categories is not None:
+        if categories is not None:
             liste = split_string(categories)
             size = len(liste)
             for i in range(size):
@@ -242,36 +244,46 @@ def insertresto():
                     alias = liste[i]
                 if alias.lower() == "restaurants":
                     check = True
-
-        if check == True:
-            id_yelp = obj.get('business_id')
-            name = obj.get('name')
-            address = obj.get('address')
-            zip_code = obj.get('postal_code')
-            state = obj.get('state')
-            latitude = obj.get('latitude')
-            longitude = obj.get('longitude')
-            rating = obj.get('stars')
-            nb_review = obj.get('review_count')
-
-            restaurant = Restaurant(id_yelp=id_yelp, nom=name, adresse=address, ville=city, zip_code=zip_code,
-                                    etat=state, latitude=latitude, longitude=longitude,
-                                    note=rating, nb_review=nb_review)
-            restaurant.save()
-
-            liste.remove('Restaurants')
-            try:
-                liste.remove('Food')
-            except:
-                print('no food')
-
+        exist=False
+        tmp2=0
+        if check:
             nb = len(liste)
             for a in range(nb):
                 alias = liste[a]
-                tmp = RestaurantType.objects.filter(nom=alias.lower())
-                if tmp:
-                    restaurant.type.add(tmp[0])
-    print(verif)
+                tmp2 = RestaurantType.objects.filter(nom=alias.lower()).count()
+                if tmp2 > 0:
+                    exist=True
+
+
+            if exist:
+                id_yelp = obj.get('business_id')
+                name = obj.get('name')
+                address = obj.get('address')
+                zip_code = obj.get('postal_code')
+                state = obj.get('state')
+                latitude = obj.get('latitude')
+                longitude = obj.get('longitude')
+                rating = obj.get('stars')
+                nb_review = obj.get('review_count')
+
+                restaurant = Restaurant(id_yelp=id_yelp, nom=name, adresse=address, ville=city, zip_code=zip_code,
+                                        etat=state, latitude=latitude, longitude=longitude,
+                                        note=rating, nb_review=nb_review)
+                restaurant.save()
+
+                liste.remove('Restaurants')
+                try:
+                    liste.remove('Food')
+                except:
+                    print('no food')
+
+                nb = len(liste)
+                for a in range(nb):
+                    alias = liste[a]
+                    tmp = RestaurantType.objects.filter(nom=alias.lower())
+                    if tmp:
+                        restaurant.type.add(tmp[0])
+        print(verif)
 
 def inserttype():
     url = "https://qghub.cloud/assets/yelp_business.json"
@@ -283,8 +295,7 @@ def inserttype():
         verif += 1
         check = False
         categories = obj.get('categories')
-        city = obj.get('city')
-        if city.lower() == "indianapolis" and categories is not None:
+        if categories is not None:
             liste = split_string(categories)
             size = len(liste)
             for i in range(size):
@@ -309,7 +320,7 @@ def inserttype():
                         if nb == 0:
                             b = RestaurantType(nom=alias.lower())
                             b.save()
-    print(verif)
+        print(verif)
     RestaurantType.objects.filter(nom="restaurants").delete()
     RestaurantType.objects.filter(nom="food").delete()
 
@@ -329,4 +340,30 @@ def insertuser():
 
             user = Adherant(id_yelp=id_yelp, prenom=prenom, nom='',mail='',password='',pseudo='', nb_review=nb_review)
             user.save()
-        print('iteration' + str(verif))
+        print('iteration ' + str(verif))
+
+def insertreview():
+    file = 14
+    url = "https://qghub.cloud/assets/review"+str(file)+".json"
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    verif = 0
+    # read json from url in stream
+    for obj in StreamJson(req):
+        verif += 1
+        user_id=obj.get('user_id')
+        resto_id = obj.get('business_id')
+        obj_re = Restaurant.objects.filter(id_yelp=resto_id)
+        if obj_re.count() != 0:
+            obj_ad = Adherant.objects.filter(id_yelp=user_id)
+            if obj_ad.count() != 0:
+                # test5=Avis.objects.filter(adherant_fk=obj_ad[0], restaurant_fk=obj_re[0]).count()
+                # if test5 == 0:
+                date = obj.get('date')
+                unix_dt = (time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S").timetuple()))
+                note=obj.get('stars')
+                text=obj.get('text')
+                fk_user=obj_ad[0]
+                fk_resto=obj_re[0]
+                avis = Avis(note=note, texte=text, unix_date=unix_dt,restaurant_fk=fk_resto, adherant_fk=fk_user)
+                avis.save()
+                print('iteration ' + str(verif))
