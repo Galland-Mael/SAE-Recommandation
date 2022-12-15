@@ -20,7 +20,8 @@ urlpatterns = [
     path('export_ratings/', export_ratings, name='export'),
     path('voirPlus/(<pk>)', voirPlus, name='voirPlus'),
     path('traitementModifUser/',traitementModifUser,name='traitementModifUser'),
-    path('groupes/',groupes,name='groupes/')
+    path('groupes/',groupes,name='groupes'),
+    path('createGroupes',createGroupes,name='createGroupes'),
 ]
 '''Utile pour afficher les images de la base de données'''
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

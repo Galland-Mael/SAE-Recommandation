@@ -218,7 +218,16 @@ def traitementModifUser(request):
 
 
 def groupes(request):
-
+    user = Adherant.objects.get(mail=request.session['mailUser'])
     context = {
-
+        'user':user,
     }
+    connect(request, context)
+    return render(request, 'groupe/groupes.html', context)
+
+def createGroupes(request):
+    user = Adherant.objects.get(mail=request.session['mailUser'])
+    context = {
+        'user': user,
+    }
+    return render(request, 'groupe/createGroupes.html', context)

@@ -12,7 +12,7 @@
 
 {% block main %}
     <div class="search-container">
-        <form action="{% url 'groupes' %}" method="POST" class="post-form form">
+        <form action="{% url 'index' %}" method="POST" class="post-form form">
             {% csrf_token %}
             <div class="search">
                 <input class="searchTerm" type="text" name="search"
