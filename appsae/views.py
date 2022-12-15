@@ -60,7 +60,7 @@ def login(request):
                 'birthDate': user.birthDate,
                 'pseudo': user.pseudo,
                 'photo': user.profile_picture.url,
-                'list': carrousel()
+                'list': listeAffichageCaroussel()
             }
             return render(request, 'index/index.html', context)
         else:
@@ -79,7 +79,12 @@ def index(request):
 
 
 def modifUser(request):
-    return render(request, 'user/modifUser.html')
+    user = Adherant.objects.get(mail=request.session['mailUser'])
+    context = {
+        'user': user,
+        'photo': user.profile_picture.url,
+    }
+    return render(request, 'user/modifUser.html', context)
 
 
 def verificationEmail(request):
@@ -192,3 +197,18 @@ def voirPlus(request, pk):
         context['endAvis'] = True
     print(afficherVoirPlus(Restaurant.objects.get(pk=pk), 0))
     return render(request, 'avis/moreAvis.html', context)
+
+
+def traitementModifUser(request):
+    user = Adherant.objects.get(mail=request.session['mailUser'])
+    print(request.POST)
+    updatePrenomUser(user.mail,request.POST['prenom'])
+    updateNomUser(user.mail,request.POST['nom'])
+    #updateDateUser(user.mail,request.POST['birthDate'])
+    if(request.POST['password']!=" "):
+        updateMdpUser(user.mail, request.POST['password'])
+    context = {
+        'list':listeAffichageCaroussel()
+    }
+    connect(request,context)
+    return render(request, 'index/index.html', context)

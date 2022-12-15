@@ -17,61 +17,45 @@
 <div class="title">
     <h2>Information Page</h2>
 </div>
-<div class="img-container flex">
-    <div class="profil-container">
 
-        <span class="profil-span opacity-null">Change</span>
-    </div>
-</div>
-<form action="#" method="post" enctype="multipart/form-data">
-    <div class="change-photo">
-        <label for="photo">photo</label>
-        <input class="profil" type="file" name="photo">
-    </div>
-    <div class="field">
-        <div>
-            <span class="name">
-                FirstName
-            </span>
-            <input class="firstName" type="text">
+<form action="{% url 'traitementModifUser' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form">
+        <div class="img-container flex">
+            <div class="profil-container">
+                <img class="img" src="{{ photo }}" alt="photo de profil">
+                <span class="profil-span opacity-null">Change</span>
+            </div>
         </div>
-        <div class="field">
-            <span class="name">
-                LastName
-            </span>
-            <input class="lastName" type="text">
+        <div class="change-photo">
+            <label for="photo">photo</label>
+            <input class="profil" type="file" name="photo">
         </div>
-        <div class="field">
+            <div class="field flex column">
             <span class="name">
-                Pseudo
+                Prenom
             </span>
-            <input class="pseudo" type="text">
-        </div>
-        <div class="field">
+                <input class="firstName" name="prenom" type="text" value="{{ user.prenom }}">
+            </div>
+            <div class="field flex column">
             <span class="name">
-                FirstName
+                Nom
             </span>
-            <input class="date" type="date">
-        </div>
-                <div class="field">
+                <input class="lastName" type="text" name="nom" value="{{ user.nom }}">
+            </div>
+            <div class="field flex column">
             <span class="name">
-                Old Password
+                Date de naissance
             </span>
-            <input class="oldPassword" type="password">
-        </div>
-                <div class="field">
+                <input class="pseudo" name="birthDate" type="text">
+            </div>
+            <div class="field flex column">
             <span class="name">
-                New Password
+                Mot de passe
             </span>
-            <input class="newpassword" type="password">
-        </div>
-                <div class="field">
-            <span class="name">
-                Confirm Password
-            </span>
-            <input class="confirmPassword" type="password">
-        </div>
-
+                <input class="date" name="password" type="password">
+            </div>
+            <button class="btn" type="submit">Modifier</button>
     </div>
 </form>
 <script src="{% static 'JS/modifUser.js' %}"></script>

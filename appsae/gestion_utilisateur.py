@@ -1,7 +1,7 @@
 from appsae.model.models import Adherant
 
 
-def updateMdp(mail_user, password):
+def updateMdpUser(mail_user, password):
     """ Fonction de mise à jour du mot de passe d'un utilisateur à partir de son mail
 
     @param mail_user: le mail de l'utilisateur
@@ -11,7 +11,7 @@ def updateMdp(mail_user, password):
     Adherant.objects.filter(mail=mail_user).update(password=password)
 
 
-def updateNom(mail_user, nom):
+def updateNomUser(mail_user, nom):
     """ Fonction de mise à jour du nom d'un utilsateur à partir de son mail
 
     @param mail_user: le mail de l'utilisateur
@@ -21,7 +21,7 @@ def updateNom(mail_user, nom):
     Adherant.objects.filter(mail=mail_user).update(nom=nom)
 
 
-def updatePrenom(mail_user, prenom):
+def updatePrenomUser(mail_user, prenom):
     """ Fonction de mise à jour du nom d'un utilsateur à partir de son mail
 
     @param mail_user: le mail de l'utilisateur
@@ -31,7 +31,7 @@ def updatePrenom(mail_user, prenom):
     Adherant.objects.filter(mail=mail_user).update(prenom=prenom)
 
 
-def updateDate(mail_user, birthdate):
+def updateDateUser(mail_user, birthdate):
     """ Fonction de mise à jour du nom d'un utilsateur à partir de son mail
     La date est au format AAAA-MM-JJ
 
