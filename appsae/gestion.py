@@ -19,6 +19,31 @@ def listeAffichageCaroussel(type=""):
     return Restaurant.objects.order_by('-note')[:NB_CARROUSEL]
 
 
+def listeAffichageCarrouselVilles(ville="", type=""):
+    """ Renvoie les meilleurs restaurants selon le type de restaurant et la ville donnés en paramètres,
+    s'il n'y a pas de de ville et de filtre, on renvoit les meilleurs restaurants de la base de données,
+    s'il n'y a pas de ville mais un filtre, on renvoit les meilleurs restaurants de la base de données avec le filtre
+    s'il y a une ville mais pas de filtre, on renvoit les meilleurs restaurants dans la ville donnée,
+    s'il y a une ville et un filtre, on renvoit les meilleurs restaurants avec le filtre et dans la ville donnée
+
+    @param ville: la ville concernée
+    @param type: le type de restaurant recherché
+    @return:
+    """
+    if type != "":
+        type_restaurant = RestaurantType.objects.filter(nom=type.lower())  # on stock le type de restaurant correspondant au filtre
+        if type_restaurant.count() == 0: # si il n'y a pas de type avec ce nom on arête la fonction
+                return []
+
+        if ville != "":
+            return Restaurant.objects.filter(ville=ville, type=type_restaurant[0]).order_by('-note')[:NB_CARROUSEL]
+        else:
+            return Restaurant.objects.filter(type=type_restaurant[0]).order_by('-note')[:NB_CARROUSEL]
+    if ville != "" and type == "":
+        return Restaurant.objects.filter(ville=ville).order_by('-note')[:NB_CARROUSEL]
+    return Restaurant.objects.order_by('-note')[:NB_CARROUSEL]
+
+
 def updateNoteMoyenneRestaurant(restaurant):
     """ Fonction de mise à jour de la note moyenne d'un restaurant passé en paramètres
 

@@ -24,6 +24,7 @@ from .gestion_groupes import *
 from .gestion_avis import *
 import datetime
 import time
+import random
 from surprise import KNNBasic
 from surprise import Dataset
 from surprise import Reader
@@ -160,27 +161,14 @@ def vueRestaurant(request, pk):
 
 def matteo(request):
     '''
-    #adherant = Adherant.objects.filter(mail="matteo.miguelez@gmail.com")[0]
-    adherant = ""
-    resto = Restaurant.objects.filter(nom="Burger King")[0]
-    #print(afficherAvis(adherant,resto))
-    print("------------------------------------------------")
-    print(listeAffichageAvis(resto, PAGE, adherant))
-    print(afficherVoirPlus(resto, PAGE, adherant))
-    modifPAGE()
-    print("------------------------------------------------")
-    print(listeAffichageAvis(resto, PAGE, adherant))
-    print(afficherVoirPlus(resto, PAGE, adherant))
-    modifPAGE()
-    print("------------------------------------------------")
+    type = RestaurantType.objects.filter(nom="français")
+    for i in range(20):
+        resto = Restaurant(id_yelp=150000+i, nom="RestoTest" +str(i), adresse="", ville="Bourg-en-Bresse",
+                           pays="France", telephone="", image_front="/../appsae/media/img_user/avatar.jpeg", note=round(random.uniform(0,5), 2))
+        resto.save()
+        resto.type.add(type[0])
     '''
-    resto = Restaurant.objects.filter(nom="Burger King")[0]
-    adherant = Adherant.objects.filter(mail="matteo.miguelez@gmail.com")[0]
-    print(Avis.objects.filter(adherant_fk=adherant, restaurant_fk=resto))
-    #ajoutAvis(adherant,resto,4,"carré")
-    #updateAvis(adherant, resto, 2, "pas ouf")
-    #deleteAvis(adherant, resto)
-    print(Avis.objects.filter(adherant_fk=adherant, restaurant_fk=resto))
+    print(listeAffichageCarrouselVilles("Bourg-en-Bresse", "français"))
     return redirect('index')
 
 
