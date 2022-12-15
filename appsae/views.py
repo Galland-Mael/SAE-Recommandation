@@ -168,7 +168,9 @@ def matteo(request):
         resto.save()
         resto.type.add(type[0])
     '''
-    print(listeAffichageCarrouselVilles("Bourg-en-Bresse", "français"))
+    # print(listeAffichageCarrouselVilles("Bourg-en-Bresse", "français"))
+    print(Adherant.objects.filter(mail="matteo.miguelez@gmail.com")[0].birthDate)
+    # xaffichageDateUser(Adherant.objects.filter(mail="matteo.miguelez@gmail.com")[0].birthDate)
     return redirect('index')
 
 

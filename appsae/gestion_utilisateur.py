@@ -1,5 +1,6 @@
 from .models import Adherant
 
+
 def updateMdp(mail_user, password):
     """ Fonction de mise à jour du mot de passe d'un utilisateur à partir de son mail
 
