@@ -164,6 +164,7 @@ def matteo(request):
     gp = Groupe.objects.filter(idGroupe=1)[0]
     #recommandationGroupeAvisGroupeComplet(gp, "Bourg-en-Bresse")
     print(recommandationGroupeAvisGroupeCarrousel(gp, "Bourg-en-Bresse"))
+    #recommandationGroupeAvisGroupeCarrousel(gp, "Bourg-en-Bresse")
     return HttpResponse('')
     # return redirect('index')
 

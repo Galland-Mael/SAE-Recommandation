@@ -1,6 +1,7 @@
 from .models import *
 from statistics import mean
 from operator import itemgetter
+from random import shuffle
 
 NB_AFFICHAGE = 10
 
@@ -82,7 +83,6 @@ def recommandationGroupeAvisGroupeComplet(groupe, ville):
             else:
                 list_temp_sans_doublons.append(list_temp[j])
         restaurants_par_type.append(list_temp_sans_doublons)
-    taille_list = restaurants_par_type
     return restaurants_par_type
 
 
@@ -95,12 +95,35 @@ def recommandationGroupeAvisGroupeCarrousel(groupe, ville):
     """
     liste_complete = recommandationGroupeAvisGroupeComplet(groupe, ville)
     taille = len(liste_complete)
+    print(liste_complete)
+    print("-------------------------")
     if taille == 0:
         return [], liste_complete
     if taille == 1:
         return liste_complete[0][:NB_AFFICHAGE], liste_complete
     if taille == 2:
-        return liste_complete[0][:NB_AFFICHAGE//2 + 1] + liste_complete[1][:NB_AFFICHAGE//2 - 1], liste_complete
+        nb_first = len(liste_complete[0])
+        nb_second = len(liste_complete[1])
+        if nb_first > NB_AFFICHAGE//2 + 1 and nb_second > NB_AFFICHAGE//2 - 1:
+            nb_first = NB_AFFICHAGE//2 + 1
+            nb_second = NB_AFFICHAGE//2 - 1
+        elif nb_first < NB_AFFICHAGE//2 + 1 and nb_second > NB_AFFICHAGE //2 -1:
+            tmp = NB_AFFICHAGE//2 + 1 - nb_first
+            nb_second = (NB_AFFICHAGE//2 -1) + tmp
+        else:
+            tmp = NB_AFFICHAGE//2 -1 - nb_second
+            nb_first = (NB_AFFICHAGE//2 + 1) + tmp
+        return liste_complete[0][:nb_first] + liste_complete[1][:nb_second], liste_complete
     if taille > 2:
-        nb_trois = NB_AFFICHAGE - (NB_AFFICHAGE//2 + 1 + NB_AFFICHAGE//4 + 1)
-        return liste_complete[0][:NB_AFFICHAGE//2 + 1] + liste_complete[1][:NB_AFFICHAGE//4 + 1] + liste_complete[2][:nb_trois], liste_complete
+        taille_trois = NB_AFFICHAGE - (NB_AFFICHAGE//2 + 1 + NB_AFFICHAGE//4 + 1)
+        nb_first = len(liste_complete[0])
+        nb_second = len(liste_complete[1])
+        nb_third = NB_AFFICHAGE - (NB_AFFICHAGE//2 + 1 + NB_AFFICHAGE//4 + 1)
+        if (nb_first > (NB_AFFICHAGE//2 + 1) and nb_second > (NB_AFFICHAGE//4 + 1) and nb_third > taille_trois):
+            return liste_complete[0][:NB_AFFICHAGE // 2 + 1] + liste_complete[1][:NB_AFFICHAGE // 4 + 1] + liste_complete[2][:nb_trois], liste_complete
+        else:
+            liste_temp = []
+            for i in range(taille):
+                for j in liste_complete[i]:
+                    liste_temp.append(j)
+            return liste_temp[:NB_AFFICHAGE]
