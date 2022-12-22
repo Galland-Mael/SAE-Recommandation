@@ -3,14 +3,14 @@
     <nav>
         <a class="img-logo-container" href="{% url 'index' %}"><img class="img-logo" src="{% static '/Image/logo.png' %}" alt=""></a>
         <ul>
-            {% if idUser %}
-                <li><a href="#" class="btn">Groupe</a></li> <!-- Penser a assigner href pour le bouton connexion -->
-                <li><a href="{% url 'logout' %}" class="btn">Deconnexion</a></li>
-                <a class="img-container-user" href="{% url 'index' %}">
+            {% if mail %}
+                <li><a href="{% url 'groupes' %}" class="btn-header">Groupe</a></li> <!-- Penser a assigner href pour le bouton connexion -->
+                <li><a href="{% url 'logout' %}" class="btn-header">Deconnexion</a></li>
+                <a class="img-container-user" href="{% url 'modifUser' %}">
                     <img src="{{ photo }}" alt="marche pas" class="img-user">
                 </a>
             {% else %}
-                <li><a href="{% url 'login' %}" class="btn">Connexion</a></li>
+                <li><a href="{% url 'login' %}" class="btn-header">Connexion</a></li>
             {% endif %}
 
         </ul>

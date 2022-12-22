@@ -5,8 +5,13 @@
                 <img class="image-search-results" src="{{ element.image_front.url }}" alt="image Restaurant">
             </div>
             <div class="info-container">
-
-              <span class="field">{{ element.nom }}</span>
+                <div class="flex">
+                    <span class="field">{{ element.nom }},</span>
+                    <span>{{ element.note }}</span>
+                    <span>
+                        <box-icon type='solid' color="#ffb503" ; name='star'></box-icon>
+                    </span>
+                </div>
                 <span class="field">{{ element.adresse }} {{ element.zip_code }}</span>
                 <span class="field">{{ element.ville }}</span>
             </div>

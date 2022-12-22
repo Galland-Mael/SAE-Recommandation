@@ -6,10 +6,9 @@ from sqlite3 import OperationalError
 import os, tempfile, zipfile, mimetypes
 from wsgiref.util import FileWrapper
 from django.conf import settings
-from django.utils.dateformat import format
 
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.encoding import smart_str
 
 from .models import *
@@ -42,7 +41,11 @@ def register(request):
         print(request.POST["mail"])
         return redirect('login')
     form = AdherantForm()
-    return render(request, 'user/register.html', {'form': form, 'info': Adherant.objects.all})
+    context = {
+        'form': form,
+        'info': Adherant.objects.all
+    }
+    return render(request, 'user/register.html', context)
     # return JsonResponse({"form": list(form.values) })
 
 
@@ -56,9 +59,10 @@ def login(request):
                 if (request.POST['password'] == adherant.password):
                     contain = True
         if contain:
-            user = Adherant.objects.get(mail=request.POST['mail'])
+            user = Adherant.objects.get(mail=request.POST['mail']);
             '''Création de la session ou je récupère que le mail de l'utilisateur'''
             request.session['mailUser'] = user.mail
+            sessionMailUser = request.session['mailUser'];
             context = {
                 'idUser': user.id,
                 'name': user.nom,
@@ -67,7 +71,7 @@ def login(request):
                 'birthDate': user.birthDate,
                 'pseudo': user.pseudo,
                 'photo': user.profile_picture.url,
-                'list': carrousel()
+                'list': listeAffichageCaroussel()
             }
             return render(request, 'index/index.html', context)
         else:
@@ -78,12 +82,20 @@ def login(request):
 
 
 def index(request):
-    liste = carrousel();
-    return render(request, 'index/index.html', {'list': liste})
+    context = {
+        'list': listeAffichageCaroussel()
+    }
+    connect(request, context)
+    return render(request, 'index/index.html', context)
 
 
 def modifUser(request):
-    return render(request, 'user/modifUser.html')
+    user = Adherant.objects.get(mail=request.session['mailUser'])
+    context = {
+        'user': user,
+        'photo': user.profile_picture.url,
+    }
+    return render(request, 'user/modifUser.html', context)
 
 
 def verificationEmail(request):
@@ -118,21 +130,6 @@ def meilleurs_resto(request):
     return render(request, 'testMatteo.html', {'list': liste});
 
 
-def carrousel():
-    restaurant = Restaurant.objects.order_by('-note');
-    list = [];
-    for i in range(10):
-        list.append(restaurant[i]);
-    return list
-
-
-def recommandation():
-    restaurant = Restaurant.objects.order_by('-note');
-    list = [];
-    for i in range(3):
-        list.append(restaurant[i]);
-    return list
-
 '''Fonction qui detruit la session et redirige sur la page index'''
 
 
@@ -145,43 +142,45 @@ def logoutUser(request):
 
 
 def search(request):
-    print("kerkekeke")
     if request.GET["search"] != "":
-        restaurants = Restaurant.objects.filter(nom__icontains=request.GET["search"])[:3]
-        return render(request, 'restaurants/searchRestaurants.html', context={'restaurants': restaurants})
+        context = {
+            'restaurants': Restaurant.objects.filter(nom__icontains=request.GET["search"]).order_by('-note')[:3]
+        }
+        return render(request, 'restaurants/searchRestaurants.html', context)
     return HttpResponse('')
 
 
 def vueRestaurant(request, pk):
-    print("vuerestaurant")
-    restaurant = Restaurant.objects.filter(pk=pk)
-    imgRestaurants=ImageRestaurant.objects.filter
-    return render(request, 'restaurants/vueRestaurant.html', context={'restaurant': restaurant})
+    context = {
+        'restaurant': Restaurant.objects.filter(pk=pk),
+        'imgRestaurants': ImageRestaurant.objects.filter(idRestaurant=pk),
+        'avis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk))[:10],
+        'nbAvis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk)),
+    }
+    connect(request, context),
+    if 'mailUser' in request.session:
+        context['commentaire'] = True
+    return render(request, 'restaurants/vueRestaurant.html', context)
 
-def matteo(request):
-    '''
-    #adherant = Adherant.objects.filter(mail="matteo.miguelez@gmail.com")[0]
-    adherant = ""
-    resto = Restaurant.objects.filter(nom="Burger King")[0]
-    #print(afficherAvis(adherant,resto))
-    print("------------------------------------------------")
-    print(listeAffichageAvis(resto, PAGE, adherant))
-    print(afficherVoirPlus(resto, PAGE, adherant))
-    modifPAGE()
-    print("------------------------------------------------")
-    print(listeAffichageAvis(resto, PAGE, adherant))
-    print(afficherVoirPlus(resto, PAGE, adherant))
-    modifPAGE()
-    print("------------------------------------------------")
-    '''
-    resto = Restaurant.objects.filter(nom="Burger King")[0]
-    adherant = Adherant.objects.filter(mail="matteo.miguelez@gmail.com")[0]
-    print(Avis.objects.filter(adherant_fk=adherant, restaurant_fk=resto))
-    #ajoutAvis(adherant,resto,4,"carré")
-    #updateAvis(adherant, resto, 2, "pas ouf")
-    #deleteAvis(adherant, resto)
-    print(Avis.objects.filter(adherant_fk=adherant, restaurant_fk=resto))
-    return redirect('index')
+
+def addCommentaires(request, pk):
+    context = {
+        'restaurant': Restaurant.objects.filter(pk=pk),
+        'imgRestaurants': ImageRestaurant.objects.filter(idRestaurant=pk),
+        'avis': Avis.objects.filter(restaurant_fk=Restaurant.objects.get(pk=pk)),
+    }
+    if 'mailUser' in request.session:
+        context['commentaire'] = True
+    if (request.method == 'POST' and 'title-rating' in request.POST and 'comm' in request.POST):
+        ajoutAvis(Adherant.objects.get(mail=request.session['mailUser']), Restaurant.objects.get(pk=pk),
+                  request.POST['title-rating'],
+                  request.POST['comm'])
+        updateAvis(Adherant.objects.get(mail=request.session['mailUser']), Restaurant.objects.get(pk=pk),
+                   request.POST['title-rating'], request.POST['comm'])
+    else:
+        messages.success(request, 'Les deux champs doivent être remplis.')
+    connect(request, context)
+    return render(request, 'restaurants/vueRestaurant.html', context)
 
 
 def export_restaurant(request):
@@ -215,3 +214,47 @@ def export_ratings(request):
         f.write('\n')
     print(file)
     return redirect('index')
+
+
+def voirPlus(request, pk):
+    context = {
+        'avis': listeAffichageAvis(Restaurant.objects.get(pk=pk), 1),
+    }
+    if (afficherVoirPlus(Restaurant.objects.get(pk=pk), 1)):
+        context['endAvis'] = True
+    print(afficherVoirPlus(Restaurant.objects.get(pk=pk), 0))
+    return render(request, 'avis/moreAvis.html', context)
+
+
+def traitementModifUser(request):
+    user = Adherant.objects.get(mail=request.session['mailUser'])
+    if( request.POST['prenom']!=""):
+        updatePrenomUser(user.mail, request.POST['prenom'])
+    if (request.POST['nom'] != ""):
+        updateNomUser(user.mail, request.POST['nom'])
+    # if(request.FILES != ""):
+    # updateProfilPick(user.mail,request.FILES['photo'])
+    # updateDateUser(user.mail,request.POST['birthDate'])
+    if (request.POST['password'] != " "):
+        updateMdpUser(user.mail, request.POST['password'])
+    context = {
+        'list': listeAffichageCaroussel()
+    }
+    connect(request, context)
+    return render(request, 'index/index.html', context)
+
+
+def groupes(request):
+    user = Adherant.objects.get(mail=request.session['mailUser'])
+    context = {
+        'user':user,
+    }
+    connect(request, context)
+    return render(request, 'groupe/groupes.html', context)
+
+def createGroupes(request):
+    user = Adherant.objects.get(mail=request.session['mailUser'])
+    context = {
+        'user': user,
+    }
+    return render(request, 'groupe/createGroupes.html', context)

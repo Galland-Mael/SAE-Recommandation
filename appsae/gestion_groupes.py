@@ -1,4 +1,4 @@
-from .models import *
+from appsae.model.models import *
 
 
 def ajout_utilisateur(user, groupe):

@@ -73,8 +73,7 @@
     line-height: 1;
     transition: opacity .5s cubic-bezier(.17, .67, .83, .67), color .5s cubic-bezier(.17, .67, .83, .67)
 }
-
-.glider-next:focus, .glider-next:hover, .glider-prev:focus, .glider-prev:hover {
+ .glider-next:hover,.glider-prev:hover {
     color: #ccc
 }
 

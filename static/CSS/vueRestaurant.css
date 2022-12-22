@@ -1,0 +1,297 @@
+
+.flex {
+    display: flex;
+}
+
+.split-image-container {
+
+    width: 100%;
+    height: 350px;
+    margin-right: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.nav-localisation {
+    display: flex;
+    margin: 0 0 0 5px;
+}
+
+a:hover {
+    color: var(--bleu);
+}
+
+.split-img-container {
+    height: 48%
+}
+
+.phone-number {
+    display: flex;
+    align-items: center;
+}
+
+.phone-icon {
+    float: right;
+}
+
+.phone-container {
+    width: 0%;
+}
+
+.nav-restaurants {
+    align-items: center;
+    height: 24px;
+    width: 90%;
+}
+
+.nav-restaurants-container {
+    width: 90%;
+}
+
+.note-restaurant {
+    height: 100%;
+    align-items: center;
+}
+
+.nav-commentaire {
+    display: flex;
+    margin: 0 0 0 10px;
+}
+
+.img {
+    height: 100%;
+    width: 100%;
+}
+
+.main-img {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.nav-commentaire-title {
+    margin: 0 0 0 5px;
+    height: 100%;
+    align-items: center;
+}
+
+.multiple-img {
+    display: flex;
+}
+
+.main-container {
+    width: 80%;
+    margin: auto;
+    display: flex;
+}
+
+.padding-bottom {
+    margin-bottom: 10px;
+}
+
+.margin-bottom {
+    margin-bottom: 20px;
+}
+
+.main-img-container {
+    width: 100%;
+    height: 100%;
+}
+
+
+.split-img {
+    height: 100%;
+    width: 100%;
+    margin: 0px 5px;
+
+}
+
+.top-right-radius {
+    border-top-right-radius: 15px;
+}
+
+
+.column {
+    flex-direction: column;
+}
+
+.bottom-right-radius {
+    border-bottom-right-radius: 15px;
+}
+
+.note {
+    margin: 0 5px 0 0;
+}
+
+.note-container {
+    display: flex;
+    align-items: center;
+}
+
+.separator {
+    height: 0px;
+    width: 90%;
+    border-bottom: solid;
+    margin: 0 0 10px 0;
+
+}
+
+.title {
+    margin: 10px 0 0 0;
+    font-size: 2em;
+    font-family: 'Poppins', sans-serif;
+}
+
+.radio-container > input {
+    display: none;
+}
+
+.radio-container {
+    display: inline-block;
+    border: 0;
+}
+
+.radio-container > label {
+    float: right;
+    margin: 0;
+}
+
+/* showing stars */
+.radio-container > label::before {
+    display: inline-block;
+    font-size: 1.1em;
+    font-family: FontAwesome;
+    content: "\f005";
+    margin: 0;
+    padding: 0.3rem .2rem;
+    cursor: pointer;
+}
+
+/* half stars */
+
+.radio-container .half::before {
+    content: "\f089";
+    position: absolute;
+    padding-right: 0;
+}
+
+/* click and hover*/
+
+input:checked ~ label, label:hover ~ label {
+    color: #ffb503;
+}
+
+.star {
+    color: #ffb503;
+}
+
+.star-icon {
+    display: flex;
+    width: 17px;
+}
+
+/* avis */
+
+.avis-container {
+    width: 80%;
+    margin: auto;
+}
+
+.test {
+    width: 100%;
+    height: 100%;
+
+}
+
+.avis-separator {
+    margin: 15px 0;
+}
+
+.bottom-space {
+    margin: 0 0 10px 0;
+}
+
+.avis-title-container {
+    align-items: baseline;
+    display: flex;
+}
+
+.title2 {
+    margin: 10px 0 0 0;
+    font-size: 1.5em;
+    font-family: 'Poppins', sans-serif;
+}
+.margin-right{
+    margin-right: 10px;
+}
+
+@media (max-width: 1200px) {
+    .nav-localisation {
+        display: none;
+    }
+
+}
+
+
+
+.card-img-container {
+    margin: 10px 10px 10px 0;
+}
+
+.avis-user-name {
+    padding-top: 10px;
+    font-weight: bold;
+}
+
+.avis-border {
+    width: 50%;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.card-img-container {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+}
+.max-width{
+    width: 100%;
+}
+.comment{
+    width: 80%;
+}
+.card-avis {
+    margin-bottom: 10px;
+}
+.hidden{
+    visibility: hidden;
+}
+
+.none {
+    display: none;
+}
+.margin-auto{
+    margin:auto ;
+}
+
+.voir-plus-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.voir-plus-btn{
+    border-radius: 20px;
+    width: 65px;
+    height: 28px;
+    border: solid 2px var(--bleu);
+    color: var(--bleu);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -29,7 +29,7 @@ body {
     overflow: hidden;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    border-top-left-radius:5px;
+    border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     box-shadow: -1px 10px 15px 1px #5f5e5e;
 }
@@ -47,7 +47,7 @@ body {
 }
 
 .cards {
-    padding: 10px ;
+    padding: 10px;
     width: 100%;
     display: flex;
 }
@@ -87,7 +87,7 @@ body {
 
 .searchTerm {
     width: 100%;
-    border: 3px solid grey;
+    border: 1px solid #a2a2a2;
     border-right: none;
     padding: 5px;
     height: 20px;
@@ -97,9 +97,9 @@ body {
 
 .searchButton {
     width: 40px;
-    height: 36px;
-    border: 1px solid grey;
-    background: grey;
+    height: 32px;
+    border: 1px solid #a2a2a2;
+    background: #a2a2a2;
     text-align: center;
     color: #eeeeee;
     border-radius: 0 5px 5px 0;
@@ -114,15 +114,25 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.decoration-none{
+
+.decoration-none {
     text-decoration: none;
-    color:black;
+    color: black;
 }
 
-.flou{
-        opacity: 0.3;
+.flou {
+    opacity: 0.3;
 }
 
-.hover:hover{
-        background-color: #dadada;
+.hover:hover {
+    background-color: #dadada;
+}
+box-icon{
+        width: 15px;
+    height: 15px;
+}
+
+.title-text{
+    margin-left: 10px;
+    font-size: 1.5em;
 }

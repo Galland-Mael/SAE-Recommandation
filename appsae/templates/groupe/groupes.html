@@ -1,0 +1,26 @@
+{% extends 'source/base.html' %}
+
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/header-footer.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/groupes.css' %}"/>
+
+{% endblock %}
+{% block header %}
+    {% include "source/header.html" %}
+{% endblock %}
+
+{% block main %}
+    <aside>
+        <div class="groupes-title flex column">
+            <div class=" full-width margin-auto">
+                <h2>Groupes</h2>
+                <a href="{% url 'createGroupes' %}" ><button class="create-groupe">Créer un groupe</button></a>
+            </div>
+        </div>
+    </aside>
+    <div class="recommandations-groupes">
+
+    </div>
+
+{% endblock %}

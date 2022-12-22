@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from django.contrib import admin
 
-from .models import Adherant, Groupe, Restaurant, RestaurantType, Horaire, ImageRestaurant, Avis
+from appsae.model.models import Adherant, Groupe, Restaurant, RestaurantType, Horaire, ImageRestaurant, Avis
 
 admin.site.register(Adherant)
 admin.site.register(Groupe)

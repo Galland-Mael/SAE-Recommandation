@@ -1,0 +1,47 @@
+main{
+    display: flex;
+}
+aside{
+    width: 25%;
+    height: 100vh;
+    background-color: red;
+}
+.groupes-title{
+    margin: 20px 0;
+    width: 100%;
+    text-align: center;
+    color: var(--bleu);
+}
+.recommandations-groupes{
+    width:100%;
+    background-color: blue;
+    height: 100vh;
+}
+h2{
+    margin-bottom: 10px;
+}
+.create-groupe{
+    height: 40px;
+    width: 150px;
+    vertical-align: middle;
+    border: none;
+    background: var(--bleu);
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 500;
+}
+.flex{
+    display: flex;
+}
+.column{
+    flex-direction: column;
+}
+.margin-auto{
+    margin: auto;
+}
+.full-width{
+    width: 100%;
+}

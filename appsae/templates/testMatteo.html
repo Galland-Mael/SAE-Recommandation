@@ -6,5 +6,26 @@
     <script src="https://unpkg.com/htmx.org@1.8.4"></script>
 </head>
 <body>
+  <div class="split-image-container flex column multiple-img">
+            <div class="split-img-container flex padding-bottom">
+                <div class="split-img">
+                    <img class="img" src="{{ elem.image.url }}" alt="marche pas">
+                </div>
+
+                <div class="split-img">
+                    <img class="img top-right-radius" src="{{ img.image }}" alt="marche pas">
+                </div>
+            </div>
+
+            <div class="split-img-container flex">
+                <div class="split-img">
+                    <img class="img" src="{{ elem.image.url }}" alt="marche pas">
+                </div>
+                <div class="split-img">
+                    <img class="img bottom-right-radius" src="{{ elem.image.url }}" alt="marche pas">
+                </div>
+            </div>
+        </div>
+        </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 {% extends 'source/base.html' %}
 {% block head %}
+    {% load modulo %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/header-footer.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/vueRestaurant.css' %}"/>
@@ -8,17 +9,200 @@
 {% block header %}
     {% include "source/header.html" %}
 {% endblock %}
-
 {% block main %}
     {% for element in restaurant %}
-        <div>{{ element.nom }}</div>
-        <div>{{ element.adresse }}</div>
-        <div>{{ element.pays }}</div>
-    {% endfor %}
-{% endblock %}
+        <div class="background-container">
+            <div class="main-container column">
+                <div class="title">{{ element.nom }}</div>
+                <div class="nav-restaurants-container flex">
+                    <div class="nav-restaurants flex">
+                        <div class="note-restaurant flex">
+                            <span>Note : {{ element.note }}</span>
+                            <div class="star-icon">
+                                <box-icon type='solid' color="#ffb503" ; name='star'></box-icon>
+                            </div>
+                        </div>
+                        <a href="#t">
+                            <div class="nav-commentaire flex">
+                                <div>{{ nbAvis|length }}</div>
+                                <div class="nav-commentaire-title margin-right">Commentaire{{ avis|pluralize }} </div>
+                            </div>
+                        </a>
+                        <div class="adress">{{ element.adresse }}</div>
+                        <div class="nav-localisation">
+                            <div>{{ element.ville }}</div>
+                            <div>({{ element.zip_code }})</div>
+                        </div>
+                    </div>
+                    <div class="phone-container">
+                        <div class="phone-icon">
+                            <div class="flex">
+                                <box-icon name='phone' type='solid' color='#9c9c9c'></box-icon>
+                                <div class="phone-number">+{{ element.telephone }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="flex">
+                    <div class="split-image-container">
 
+                        <div class="main-img-container"><img class="img main-img" src="{{ element.image_front.url }}"
+                                                             alt="marche pas"></div>
+                    </div>
+                    <div class="split-image-container flex column multiple-img">
+                        <div class="split-img-container margin-bottom flex ">
+                            <div class="split-img">
+                                {% for image in imgRestaurants %}
+                                    {% if forloop.counter == 1 %}
+                                        <img class="img" src="{{ image.image.url }}" alt="marche pas">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="split-img">
+                                {% for element in imgRestaurants %}
+                                    {% if forloop.counter == 2 %}
+                                        <img class="img top-right-radius" src="{{ element.image.url }}"
+                                             alt="marche pas">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="split-img-container flex">
+                            <div class="split-img">
+                                {% for element in imgRestaurants %}
+                                    {% if forloop.counter == 3 %}
+                                        <img class="img" src="{{ element.image.url }}" alt="marche pas">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="split-img">
+                                {% for element in imgRestaurants %}
+                                    {% if forloop.counter == 4 %}
+                                        <img class="img bottom-right-radius" src="{{ element.image.url }}"
+                                             alt="marche pas">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+        <!-- Mettre un avis -->
+
+        <div class="avis-container">
+        {% if mail %}
+                <div class="title2">Ajouter un avis</div>
+            <form action="{% url 'addCommentaires' element.pk %}" method="post">
+                {% csrf_token %}
+                <div class="note-container">
+                    <label for="rating">Note : </label>
+                    <div class="radio-container">
+                        <input type="radio" name="title-rating" id="rating10" value="5"><label for="rating10"
+                                                                                               title="5"></label>
+                        <input type="radio" name="title-rating" id="rating9" value="4.5"><label for="rating9"
+                                                                                                title="4.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating8" value="4"><label for="rating8"
+                                                                                              title="4"></label>
+                        <input type="radio" name="title-rating" id="rating7" value="3.5"><label for="rating7"
+                                                                                                title="3.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating6" value="3"><label for="rating6"
+                                                                                              title="3"></label>
+                        <input type="radio" name="title-rating" id="rating5" value="2.5"><label for="rating5"
+                                                                                                title="2.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating4" value="2"><label for="rating4"
+                                                                                              title="2"></label>
+                        <input type="radio" name="title-rating" id="rating3" value="1.5"><label for="rating3"
+                                                                                                title="1.5"
+                                                                                                class="half"></label>
+                        <input type="radio" name="title-rating" id="rating2" value="1"><label for="rating2"
+                                                                                              title="1"></label>
+                        <input type="radio" name="title-rating" id="rating1" value="0.5"/><label for="rating1"
+                                                                                                 title="0.5"
+                                                                                                 class="half"></label>
+                    </div>
+                </div>
+                <label for="comments">commentaire</label>
+                <input type="text" name="comm">
+                <button class="avis-btn" type="submit">Ajouter</button>
+            </form>
+            <div class="separator avis-separator"></div>
+        {% endif %}
+    {% endfor %}
+
+<div class="avis-title-container">
+    <div class="avis-title bottom-space title2" id="commentaires">Commentaire{{ avis|pluralize }} </div>
+    <div class="nb-commentaire title2">({{ nbAvis|length }})</div>
+</div>
+<div class="separator avis-separator"></div>
+</div>
+
+
+
+    <!-- afficher les avis -->
+
+
+    <div class="comment margin-auto">
+        {% for element in avis %}
+
+            {% if forloop.counter|modulo:'2' != 0 %}
+                <div class="flex margin-bottom">
+            {% endif %}
+
+        <div class="avis-border flex column ">
+            <div class="card-avis flex">
+                <div class="card-user-container flex">
+                    <div class="card-img-container flex ">
+                        <img class="img" src="{{ element.adherant_fk.profile_picture.url }}" alt="marche pas">
+                    </div>
+                </div>
+                <div class="flex column">
+
+
+                    <span class="avis-user-name flex">{{ element.adherant_fk.prenom }}</span>
+                    <div class="note-restaurant flex">
+                        <span>Note : {{ element.note }}</span>
+                        <div class="star-icon">
+                            <box-icon type='solid' color="#ffb503" ; name='star'></box-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="avis-text flex">{{ element.texte }}</span>
+        </div>
+        {% if forloop.counter|modulo:'2' == 0 %}
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% for element in restaurant %}
+        {% if not endAvis %}
+            <!-- <div id="container-voir-plus-result"></div>
+        <div class="voir-plus-container">
+            <div class="voir-plus-btn"
+                    hx-get="{% url 'voirPlus' element.pk %}"
+                    hx-trigger="click"
+                    hx-target="#container-voir-plus-result"
+            >voir plus
+            </div>
+        </div> -->
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
 {% block footer %}
     {% include "source/footer.html" %}
 {% endblock %}
-
+{% block script %}
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+{% endblock %}
 

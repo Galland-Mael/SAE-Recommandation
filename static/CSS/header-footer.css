@@ -1,5 +1,6 @@
 html {
     --gris: #6C6C6C;
+     --color: #297373;
     --gris_clair: #989898;
     --bleu: #297373;
     --blanc: #ffff;
@@ -10,7 +11,7 @@ html {
     padding: 0;
 }
 
-.btn {
+.btn-header {
     background-color: var(--blanc);
     color: var(--bleu);
     text-decoration: none;
@@ -25,7 +26,8 @@ html {
 
 }
 
-.btn:hover{
+.btn-header:hover{
+    text-decoration: none;
     background-color: var(--bleu);
     color: var(--blanc);
     transition: background-color ease-in 0.2s, color ease-in 0.2s;
@@ -37,7 +39,6 @@ header {
     box-shadow: 0px -42px 10px 40px #111;
     align-items: center;
     flex-direction: row;
-    margin-bottom: 5vh;
     width: 100%;
 }
 

@@ -9,6 +9,7 @@ def listeAffichageCaroussel(type=""):
     si il n'y pas de filtre, le paramètre d'entrée est la chaine "", donnée par défaut
 
     @param type: le type de restaurant recherché
+    @type type : str
     @return: les meilleurs restaurants selon le filtre
     """
     if type != "":

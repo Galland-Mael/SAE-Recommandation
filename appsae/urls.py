@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-
-from .views import *
+from appsae.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -13,11 +12,15 @@ urlpatterns = [
     path('verificationEmail/', verificationEmail, name='verificationEmail'),
     path('', index, name='index'),
     path('logout/', logoutUser, name='logout'),
-    path('matteo/', matteo, name='matteo'),
+    path('addCommentaires/(<pk>)', addCommentaires, name='addCommentaires'),
     path('vueRestaurant/(<pk>)', vueRestaurant, name='vueRestaurant'),
     path('search/', search, name='search'),
     path('export_restaurant/', export_restaurant, name='export'),
     path('export_ratings/', export_ratings, name='export'),
+    path('voirPlus/(<pk>)', voirPlus, name='voirPlus'),
+    path('traitementModifUser/',traitementModifUser,name='traitementModifUser'),
+    path('groupes/',groupes,name='groupes'),
+    path('createGroupes',createGroupes,name='createGroupes'),
 ]
 '''Utile pour afficher les images de la base de données'''
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
