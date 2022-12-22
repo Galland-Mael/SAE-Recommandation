@@ -1,4 +1,4 @@
-from .models import *
+from appsae.model.models import *
 from .gestion import *
 
 def ajoutAvis(user, restaurant, note, avis = ""):

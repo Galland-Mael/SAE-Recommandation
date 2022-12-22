@@ -1,4 +1,4 @@
-from .models import *
+from appsae.model.models import *
 from django.db.models import Avg
 
 NB_CARROUSEL = 10
