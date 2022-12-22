@@ -84,6 +84,24 @@ def listeAffichageAvis(restaurant, num, user=""):
         avis = Avis.objects.filter(restaurant_fk=restaurant).exclude(adherant_fk=user)
     return avis[num*taille_list:(num + 1)*taille_list]
 
+def connect(request,context):
+    if 'mailUser' in request.session:
+        user = Adherant.objects.get(mail=request.session['mailUser'])
+        context['mail'] = request.session['mailUser']
+        context['photo'] = user.profile_picture.url
+    return context
+def updateNoteMoyenneRestaurant(restaurant):
+    """ Fonction de mise à jour de la note moyenne d'un restaurant passé en paramètres
+    @param nomRestaurant: le nom du restaurant
+    @return: /
+    """
+    avis_resto = Avis.objects.filter(restaurant_fk=restaurant)
+    if avis_resto.count() != 0:
+        note = avis_resto.aggregate(Avg("note"))
+        Restaurant.objects.filter(nom=restaurant.nom).update(note=round(note['note__avg'], 2))
+    else:
+        Restaurant.objects.filter(nom=restaurant.nom).update(note=-1)
+
 
 def afficherVoirPlus(restaurant, num, user=""):
     """Renvoie true s'il faut afficher le bouton "Voir Plus", false sinon
