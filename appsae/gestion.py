@@ -25,8 +25,12 @@ def updateNoteMoyenneRestaurant(restaurant):
     @param nomRestaurant: le nom du restaurant
     @return: /
     """
-    note = Avis.objects.filter(restaurant_fk=restaurant).aggregate(Avg("note"))
-    Restaurant.objects.filter(nom=restaurant.nom).update(note=round(note['note__avg'], 2))
+    avis_resto = Avis.objects.filter(restaurant_fk=restaurant)
+    if avis_resto.count() != 0:
+        note = avis_resto.aggregate(Avg("note"))
+        Restaurant.objects.filter(nom=restaurant.nom).update(note=round(note['note__avg'], 2))
+    else:
+        Restaurant.objects.filter(nom=restaurant.nom).update(note=-1)
 
 
 def listeAffichageDejaVisiter(user):

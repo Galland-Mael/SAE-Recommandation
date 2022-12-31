@@ -84,11 +84,11 @@ def index(request):
     #inserttype()
     #insertresto()
     #insertuser()
+    #Avis.objects.all().delete()
     #Restaurant.objects.all().delete()
     #Adherant.objects.all().delete()
-    #Avis.objects.all().delete()
     #insertreview()
-    liste = carrousel();
+    liste = carrousel()
     return render(request, 'index/index.html', {'list': liste})
 
 
@@ -343,7 +343,7 @@ def insertuser():
         print('iteration ' + str(verif))
 
 def insertreview():
-    file = 14
+    file = 18
     url = "https://qghub.cloud/assets/review"+str(file)+".json"
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     verif = 0
@@ -366,4 +366,15 @@ def insertreview():
                 fk_resto=obj_re[0]
                 avis = Avis(note=note, texte=text, unix_date=unix_dt,restaurant_fk=fk_resto, adherant_fk=fk_user)
                 avis.save()
-                print('iteration ' + str(verif))
+        print('fichier : ' + str(file) + ', iteration : ' + str(verif))
+
+def remove_doublon():
+    verif = 0
+    for avis in Avis.objects.all():
+        verif += 1
+        doublon = Avis.objects.filter(restaurant_fk=avis.restaurant_fk, adherant_fk=avis.adherant_fk).order_by("-unix_date")
+        tmp=doublon[0]
+        for lecture in doublon:
+            if lecture != tmp:
+                lecture.delete()
+        print(verif)
