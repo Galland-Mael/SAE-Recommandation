@@ -1,5 +1,4 @@
 from .models import *
-from django.db.models import Avg
 
 NB_CARROUSEL = 10
 
@@ -44,20 +43,6 @@ def listeAffichageCarrouselVilles(ville="", type=""):
     return Restaurant.objects.order_by('-note')[:NB_CARROUSEL]
 
 
-def updateNoteMoyenneRestaurant(restaurant):
-    """ Fonction de mise à jour de la note moyenne d'un restaurant passé en paramètres
-
-    @param nomRestaurant: le nom du restaurant
-    @return: /
-    """
-    avis_resto = Avis.objects.filter(restaurant_fk=restaurant)
-    if avis_resto.count() != 0:
-        note = avis_resto.aggregate(Avg("note"))
-        Restaurant.objects.filter(nom=restaurant.nom).update(note=round(note['note__avg'], 2))
-    else:
-        Restaurant.objects.filter(nom=restaurant.nom).update(note=-1)
-
-
 def listeAffichageDejaVisiter(user):
     """ Renvoie une liste de taille max NB_CARROUSEL contenant les restaurants que l'utilisateur
     a déjà noté, et qu'il a apprécié (note >= 3.5)
@@ -66,4 +51,3 @@ def listeAffichageDejaVisiter(user):
     @return: une liste de restaurants
     """
     return Avis.objects.filter(adherant_fk=user, note__gte=3.5)[:NB_CARROUSEL]
-

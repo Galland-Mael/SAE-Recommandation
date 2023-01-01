@@ -1,7 +1,7 @@
 from .models import *
 
 
-def ajout_utilisateur(user, groupe):
+def ajoutUtilisateurGroupe(user, groupe):
     """ Ajout d'un utilisateur au groupe
 
     @param user: l'utilisateur à ajouter
@@ -49,7 +49,7 @@ def updateNom(groupe, nom):
     Groupe.objects.filter(idGroupe=groupe.idGroupe).update(nom_groupe=nom)
 
 
-def suppression_utilisateur(user, groupe):
+def suppressionUtilisateur(user, groupe):
     """ Suppression d'un utilisateur au groupe
     Si il n'y a qu'un utilisateur dans le groupe, le groupe est supprimé,
     Si le gérant est supprimé du groupe on donne l'id_gerant au premier utilisateur
@@ -71,7 +71,7 @@ def suppression_utilisateur(user, groupe):
         groupe.liste_adherants.remove(user)
 
 
-def creation_groupe(nom, user):
+def creationGroupe(nom, user):
     """ Création d'un groupe à partir de l'utilisateur user, user sera le
     gérant du groupe
 
@@ -85,7 +85,7 @@ def creation_groupe(nom, user):
     gp.liste_adherants.add(user)
 
 
-def listeGroupe(groupe):
+def getListeAdherantsGroupe(groupe):
     """ Renvoie la liste des utilisateurs présents dans le groupe
 
     @param groupe: le groupe

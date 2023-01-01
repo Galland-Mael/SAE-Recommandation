@@ -22,6 +22,7 @@ from .gestion import *
 from .gestion_utilisateur import *
 from .gestion_groupes import *
 from .gestion_avis import *
+from .gestion_note import *
 from .recommandation_groupe import *
 import datetime
 import time
