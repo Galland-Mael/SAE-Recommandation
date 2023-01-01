@@ -37,6 +37,7 @@ def modifPAGE():
     global PAGE
     PAGE += 1
 
+
 def register(request):
     if request.method == "POST":
         '''Remplissage de la base de données'''
@@ -160,13 +161,14 @@ def vueRestaurant(request, pk):
     imgRestaurants=ImageRestaurant.objects.filter
     return render(request, 'restaurants/vueRestaurant.html', context={'restaurant': restaurant})
 
+
 def matteo(request):
-    gp = Groupe.objects.filter(idGroupe=1)[0]
-    #recommandationGroupeAvisGroupeComplet(gp, "Bourg-en-Bresse")
-    print(recommandationGroupeAvisGroupeCarrousel(gp, "Bourg-en-Bresse"))
-    #recommandationGroupeAvisGroupeCarrousel(gp, "Bourg-en-Bresse")
+    gp = Groupe.objects.get(idGroupe=1222) # idGroupe=623
+    start = time.time()
+    print(recommandationGroupeAvisGroupeComplet(gp, "Philadelphia")[:25])
+    print(time.time() - start)
+
     return HttpResponse('')
-    # return redirect('index')
 
 
 def export_restaurant(request):
