@@ -88,6 +88,7 @@ def index(request):
     #Restaurant.objects.all().delete()
     #Adherant.objects.all().delete()
     #insertreview()
+    count_ville()
     liste = carrousel()
     return render(request, 'index/index.html', {'list': liste})
 
@@ -378,3 +379,19 @@ def remove_doublon():
             if lecture != tmp:
                 lecture.delete()
         print(verif)
+
+def count_ville():
+    verif = 0
+    ville = {}
+    for resto in Restaurant.objects.all():
+        if resto.ville not in ville:
+            ville[resto.ville]=1
+        else:
+            ville[resto.ville] += 1
+    sorted_ville = sorted(ville.items(), key=lambda x: x[1], reverse=True)
+    print(sorted_ville)
+
+def verif():
+    for resto in Restaurant.objects.filter("St. Petersburg"):
+        if resto.ville == "St. Petersburg":
+            resto.ville = "Saint Petersburg"
