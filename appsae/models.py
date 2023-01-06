@@ -27,7 +27,7 @@ class Groupe(models.Model):
     idGroupe = models.IntegerField(default=0, blank=False)
     nom_groupe = models.CharField(max_length=25)
     liste_adherants = models.ManyToManyField(Adherant)
-    id_gerant = models.IntegerField(default=-1)
+    id_gerant = models.CharField(default="", max_length=250)
 
     def __str__(self):
         return self.nom_groupe
