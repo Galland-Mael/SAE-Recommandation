@@ -31,6 +31,8 @@ from surprise import KNNBasic
 from surprise import Dataset
 from surprise import Reader
 
+from .suppBd import *
+
 PAGE = 0
 
 
@@ -165,10 +167,49 @@ def vueRestaurant(request, pk):
 def matteo(request):
     # gp = Groupe.objects.get(idGroupe=1222) # idGroupe=623
     start = time.time()
+    print(Adherant.objects.all().count())
+    suppressionAdherant()
+    print(Adherant.objects.all().count())
     # print(recommandationGroupeAvisGroupeComplet(gp, "Philadelphia")[:25])
     print(time.time() - start)
 
     return HttpResponse('')
+
+
+def setImg(request):
+    i = 0
+    y = 0
+    for restaurant in Restaurant.objects.all():
+        y = y % 4
+        if y == 0:
+            print("insertion img front"'\n')
+            restaurant.image_front = '/img_restaurant/imagefront1.jpg'
+            restaurant.save()
+        elif y == 1:
+            print("insertion img front"'\n')
+            restaurant.image_front = '/img_restaurant/imagefront2.jpg'
+            restaurant.save()
+        elif y == 2:
+            print("insertion img front"'\n')
+            restaurant.image_front = '/img_restaurant/imagefront3.jpg'
+            restaurant.save()
+        elif y == 3:
+            print("insertion img front"'\n')
+            restaurant.image_front = '/img_restaurant/imagefront4.jpg'
+            restaurant.save()
+        y += 1
+        i = i % 12
+        print("insertion liste img"'\n')
+        imgset = ImageRestaurant.objects.all()
+        restaurant.img.add(imgset[i])
+        i += 1
+        restaurant.img.add(imgset[i])
+        i += 1
+        restaurant.img.add(imgset[i])
+        i += 1
+        restaurant.img.add(imgset[i])
+        i += 1
+    return redirect('index')
 
 
 def export_restaurant(request):

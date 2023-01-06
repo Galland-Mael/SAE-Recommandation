@@ -18,6 +18,20 @@ def listeAffichageCaroussel(type=""):
     return Restaurant.objects.order_by('-note')[:NB_CARROUSEL]
 
 
+def listeRevoirUser(user):
+    """
+
+    @param user: l'utilisateur
+    @return:
+    """
+    # A FINIR
+    avis = Avis.objects.filter(adherant_fk=user, note__gte=3.5).order_by("-note")
+    l = []
+    for elem in avis:
+        l.append((elem.note, elem.restaurant_fk))
+    return l
+
+
 def listeAffichageCarrouselVilles(ville="", type=""):
     """ Renvoie les meilleurs restaurants selon le type de restaurant et la ville donnés en paramètres,
     s'il n'y a pas de de ville et de filtre, on renvoit les meilleurs restaurants de la base de données,

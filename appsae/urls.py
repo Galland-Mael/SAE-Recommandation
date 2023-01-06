@@ -12,6 +12,7 @@ urlpatterns = [
     path('modifuser/', modifUser, name='modifUser'),
     path('verificationEmail/', verificationEmail, name='verificationEmail'),
     path('', index, name='index'),
+    path('setImg/', setImg, name='setImg'),
     path('logout/', logoutUser, name='logout'),
     path('matteo/', matteo, name='matteo'),
     path('vueRestaurant/(<pk>)', vueRestaurant, name='vueRestaurant'),
