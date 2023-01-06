@@ -165,14 +165,8 @@ def vueRestaurant(request, pk):
 
 
 def matteo(request):
-    # gp = Groupe.objects.get(idGroupe=1222) # idGroupe=623
     start = time.time()
-    print(Adherant.objects.all().count())
-    suppressionAdherant()
-    print(Adherant.objects.all().count())
-    # print(recommandationGroupeAvisGroupeComplet(gp, "Philadelphia")[:25])
     print(time.time() - start)
-
     return HttpResponse('')
 
 

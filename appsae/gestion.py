@@ -18,18 +18,18 @@ def listeAffichageCaroussel(type=""):
     return Restaurant.objects.order_by('-note')[:NB_CARROUSEL]
 
 
-def listeRevoirUser(user):
-    """
+def listeRevoirUser(user, nb_affichage=10):
+    """ Renvoie les restaurants déjà visités par l'utilisateur avec une note supérieur ou égale à 3.5
 
     @param user: l'utilisateur
-    @return:
+    @param nb_affichage: le nombre de restaurants à renvoyer
+    @return: liste de restaurant de taille nb_affichage
     """
-    # A FINIR
-    avis = Avis.objects.filter(adherant_fk=user, note__gte=3.5).order_by("-note")
-    l = []
+    avis = Avis.objects.filter(adherant_fk=user, note__gte=3.5).order_by("-note")[:nb_affichage]
+    liste_revoir = []
     for elem in avis:
-        l.append((elem.note, elem.restaurant_fk))
-    return l
+        liste_revoir.append(elem.restaurant_fk)
+    return liste_revoir
 
 
 def listeAffichageCarrouselVilles(ville="", type=""):
@@ -55,13 +55,3 @@ def listeAffichageCarrouselVilles(ville="", type=""):
     if ville != "" and type == "":
         return Restaurant.objects.filter(ville=ville).order_by('-note')[:NB_CARROUSEL]
     return Restaurant.objects.order_by('-note')[:NB_CARROUSEL]
-
-
-def listeAffichageDejaVisiter(user):
-    """ Renvoie une liste de taille max NB_CARROUSEL contenant les restaurants que l'utilisateur
-    a déjà noté, et qu'il a apprécié (note >= 3.5)
-
-    @param user: l'utilisateur
-    @return: une liste de restaurants
-    """
-    return Avis.objects.filter(adherant_fk=user, note__gte=3.5)[:NB_CARROUSEL]
