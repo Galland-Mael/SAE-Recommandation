@@ -19,6 +19,8 @@ urlpatterns = [
     path('search/', search, name='search'),
     path('export_restaurant/', export_restaurant, name='export'),
     path('export_ratings/', export_ratings, name='export'),
+    path('setimg',setImg,name='setImg'),
+    path('recommendation/', antoine, name='recommendation')
 ]
 '''Utile pour afficher les images de la base de données'''
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

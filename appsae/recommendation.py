@@ -35,56 +35,57 @@ def load_dataset():
     return (ratings_dataset, restaurantID_to_name)
 
 
-dataset, restaurantID_to_name = load_dataset()
-
-# Build a full Surprise training set from dataset
-trainset = dataset.build_full_trainset()
-
-similarity_matrix = KNNBasic(sim_options={
-        'name': 'cosine',
-        'user_based': False
-        })\
-        .fit(trainset)\
-        .compute_similarities()
-
-test_subject = '12'
-
-k = 5
-
-test_subject_iid = trainset.to_inner_uid(test_subject)
-test_subject_ratings = trainset.ur[test_subject_iid]
-k_neighbors = heapq.nlargest(k, test_subject_ratings, key=lambda t: t[1])
-
-candidates = defaultdict(float)
-
-for itemID, rating in k_neighbors:
-    try:
-      similaritities = similarity_matrix[itemID]
-      for innerID, score in enumerate(similaritities):
-          candidates[innerID] += score * (rating / 5.0)
-    except:
-      continue
-
-
-def getRestaurantName(RestaurantID):
+def getRestaurantName(RestaurantID,restaurantID_to_name):
   if int(RestaurantID) in restaurantID_to_name:
     return restaurantID_to_name[int(RestaurantID)]
   else:
       return ""
 
 
-visited = {}
-for itemID, rating in trainset.ur[test_subject_iid]:
-  visited[itemID] = 1
-  recommendations = []
 
-  position = 0
-  for itemID, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
-      if not itemID in visited:
-          recommendations.append(getRestaurantName(trainset.to_raw_iid(itemID)))
-          position += 1
-          if (position > 10): break  # We only want top 10
+def finalRecommendation():
+    dataset, restaurantID_to_name = load_dataset()
 
-  for rec in recommendations:
-      print("Restaurant: ", rec)
+    # Build a full Surprise training set from dataset
+    trainset = dataset.build_full_trainset()
+
+    similarity_matrix = KNNBasic(sim_options={
+            'name': 'cosine',
+            'user_based': False
+            })\
+            .fit(trainset)\
+            .compute_similarities()
+
+    test_subject = '12'
+
+    k = 5
+
+    test_subject_iid = trainset.to_inner_uid(test_subject)
+    test_subject_ratings = trainset.ur[test_subject_iid]
+    k_neighbors = heapq.nlargest(k, test_subject_ratings, key=lambda t: t[1])
+
+    candidates = defaultdict(float)
+
+    for itemID, rating in k_neighbors:
+        try:
+          similaritities = similarity_matrix[itemID]
+          for innerID, score in enumerate(similaritities):
+              candidates[innerID] += score * (rating / 5.0)
+        except:
+          continue
+
+    visited = {}
+    for itemID, rating in trainset.ur[test_subject_iid]:
+      visited[itemID] = 1
+      recommendations = []
+
+      position = 0
+      for itemID, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
+          if not itemID in visited:
+              recommendations.append(getRestaurantName(trainset.to_raw_iid(itemID),restaurantID_to_name))
+              position += 1
+              if (position > 10): break  # We only want top 10
+
+      for rec in recommendations:
+          print("Restaurant: ", rec)
 

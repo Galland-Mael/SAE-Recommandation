@@ -7,7 +7,7 @@ import os, tempfile, zipfile, mimetypes
 from wsgiref.util import FileWrapper
 from django.conf import settings
 from django.utils.dateformat import format
-
+from .recommendation import *
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.encoding import smart_str
@@ -166,6 +166,14 @@ def vueRestaurant(request, pk):
 
 def matteo(request):
     start = time.time()
+    print(time.time() - start)
+    '''suppressionAdherant(10)'''
+    majNb_reviewAdherant()
+    return HttpResponse('')
+
+def antoine(request):
+    start = time.time()
+    finalRecommendation()
     print(time.time() - start)
     return HttpResponse('')
 
