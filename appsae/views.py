@@ -138,13 +138,17 @@ def groupe(request):
 
 def removeUser(request, user):
     list = request.session['groupe']
-    list.remove(user)
+    print(list)
+    if user in list:
+        list.remove(user)
     request.session['groupe'] = list
+    print(request.session['groupe'])
+    print(user)
     context = {
-        'groupe': Adherant.objects.filter(mail__in=list)
+        'groupe': Adherant.objects.filter(mail__in=request.session['groupe'])
     }
     connect(request, context)
-    return render(request, 'user/createGroup.html', context)
+    return HttpResponse('')
 
 
 def addUser(request, user):
@@ -156,13 +160,15 @@ def addUser(request, user):
         list.append(user)
     request.session['groupe'] = list
     context = {
-        'groupe': Adherant.objects.filter(mail__in=list)
+        'groupe': Adherant.objects.filter(mail__in=request.session['groupe'])
     }
     connect(request, context)
     return render(request, 'user/createGroup.html', context)
 
 
 def createGroup(request):
+    if 'groupe' in request.session:
+        del request.session['groupe']
     context = {}
     connect(request, context)
     return render(request, 'user/createGroup.html', context)

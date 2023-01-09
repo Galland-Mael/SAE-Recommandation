@@ -38,24 +38,20 @@
             </div>
         </div>
         {% for element in groupe %}
-            {% if forloop.counter|modulo:'2' != 0 %}
-                <div class="flex margin-bottom">
-            {% endif %}
-        <div class="cards cards-background">
-            <div class="image-container-search-results">
-                <img class="image-search-results" src="{{ element.profile_picture.url }}" alt="image user">
-            </div>
-            <div class="info-container margin-vertical">
+            <section class="cards-background">
+                <div class="image-container-search-results">
+                    <img class="image-search-results" src="{{ element.profile_picture.url }}" alt="image user">
+                </div>
+                <div class="info-container margin-vertical">
                     <p class="text">{{ element.mail }} </p>
-            </div>
-            <box-icon  hx-get="{% url 'removeUser' element %}"
-                           hx-trigger="click"
-                       name='x' color='#297373' size='lg'></box-icon>
-        </div>
-        {% if forloop.counter|modulo:'2' == 0 %}
-            </div>
-        {% endif %}
-        {% endfor %}
+                </div>
+                <box-icon hx-get="{% url 'removeUser' element %}"
+                          hx-trigger="click"
+                          hx-target="closest section"
+                          hx-swap="outerHTML"
+                          name='x' color='#297373' size='lg'></box-icon>
+            </section>
+            {% endfor %}
     </div>
     <div class="full-width center">
         <div class="button">Valider</div>
