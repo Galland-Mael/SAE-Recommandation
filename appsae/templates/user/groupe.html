@@ -1,0 +1,20 @@
+{% extends 'source/base.html' %}
+{% block head %}
+    {% load modulo %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/header-footer.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/groupe.css' %}"/>
+
+{% endblock %}
+
+{% block header %}
+    {% include "source/header.html" %}
+{% endblock %}
+
+{% block main %}
+        <a class="img-container-user" href="{% url 'createGroup' %}">create groupe</a>
+{% endblock %}
+
+{% block footer %}
+    {% include "source/footer.html" %}
+{% endblock %}

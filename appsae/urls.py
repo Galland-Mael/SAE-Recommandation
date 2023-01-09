@@ -16,9 +16,14 @@ urlpatterns = [
     path('addCommentaires/(<pk>)', addCommentaires, name='addCommentaires'),
     path('vueRestaurant/(<pk>)', vueRestaurant, name='vueRestaurant'),
     path('search/', search, name='search'),
+    path('addUser/(<user>)', addUser, name='addUser'),
+    path('removeUser/(<user>)', removeUser, name='removeUser'),
+    path('searchUser/', searchUser, name='searchUser'),
     path('export_restaurant/', export_restaurant, name='export'),
     path('export_ratings/', export_ratings, name='export'),
     path('voirPlus/(<pk>)', voirPlus, name='voirPlus'),
+    path('groupe/', groupe, name='groupe'),
+    path('createGroup/', createGroup, name='createGroup'),
 ]
 '''Utile pour afficher les images de la base de données'''
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

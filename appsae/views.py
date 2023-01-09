@@ -60,7 +60,7 @@ def login(request):
                 'birthDate': user.birthDate,
                 'pseudo': user.pseudo,
                 'photo': user.profile_picture.url,
-                'list': carrousel()
+                'list': listeAffichageCaroussel()
             }
             return render(request, 'index/index.html', context)
         else:
@@ -71,6 +71,8 @@ def login(request):
 
 
 def index(request):
+    if 'groupe' in request.session:
+        del request.session['groupe']
     context = {
         'list': listeAffichageCaroussel()
     }
@@ -101,7 +103,7 @@ def verificationEmail(request):
 
 def meilleurs_resto(request):
     ''' Renvoie les restaurants les mieux notés '''
-    liste = carrousel();
+    liste = listeAffichageCaroussel();
     return render(request, 'testMatteo.html', {'list': liste});
 
 
@@ -121,8 +123,61 @@ def search(request):
         context = {
             'restaurants': Restaurant.objects.filter(nom__icontains=request.GET["search"]).order_by('-note')[:3]
         }
-        return render(request, 'restaurants/searchRestaurants.html', context)
-    return HttpResponse('')
+    elif request.GET["search"] == "":
+        context = {
+            'user': {}
+        }
+    return render(request, 'restaurants/searchRestaurants.html', context)
+
+
+def groupe(request):
+    context = {}
+    connect(request, context)
+    return render(request, 'user/groupe.html', context)
+
+
+def removeUser(request, user):
+    list = request.session['groupe']
+    list.remove(user)
+    request.session['groupe'] = list
+    context = {
+        'groupe': Adherant.objects.filter(mail__in=list)
+    }
+    connect(request, context)
+    return render(request, 'user/createGroup.html', context)
+
+
+def addUser(request, user):
+    if 'groupe' in request.session:
+        list = request.session['groupe']
+    else:
+        list = []
+    if user not in list:
+        list.append(user)
+    request.session['groupe'] = list
+    context = {
+        'groupe': Adherant.objects.filter(mail__in=list)
+    }
+    connect(request, context)
+    return render(request, 'user/createGroup.html', context)
+
+
+def createGroup(request):
+    context = {}
+    connect(request, context)
+    return render(request, 'user/createGroup.html', context)
+
+
+def searchUser(request):
+    if request.GET["search"] != "":
+        context = {
+            'user': Adherant.objects.filter(mail__icontains=request.GET["search"])[:3]
+        }
+    elif request.GET["search"] == "":
+        context = {
+            'user': {}
+        }
+    return render(request, 'user/searchUser.html', context)
 
 
 def vueRestaurant(request, pk):

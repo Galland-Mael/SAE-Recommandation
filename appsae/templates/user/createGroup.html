@@ -1,0 +1,71 @@
+{% extends 'source/base.html' %}
+{% block head %}
+    {% load modulo %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/header-footer.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/createGroup.css' %}"/>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+{% endblock %}
+
+{% block header %}
+    {% include "source/header.html" %}
+{% endblock %}
+
+{% block main %}
+    <div class="main-container">
+        <div class="title">
+            <p>Nouveau Groupe</p>
+        </div>
+        <div class="search-container">
+            <form action="{% url 'createGroup' %}" method="POST" class="post-form form">
+                {% csrf_token %}
+                <div class="search">
+                    <input class="searchTerm" type="text" name="search"
+                           hx-get="{% url 'searchUser' %}"
+                           hx-trigger="keyup changed delay:250ms"
+                           hx-target="#search-results"
+                           placeholder="Ajouter un utilisateur..."
+                    >
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="result-container">
+                <div id="search-results">
+
+                </div>
+            </div>
+        </div>
+        {% for element in groupe %}
+            {% if forloop.counter|modulo:'2' != 0 %}
+                <div class="flex margin-bottom">
+            {% endif %}
+        <div class="cards cards-background">
+            <div class="image-container-search-results">
+                <img class="image-search-results" src="{{ element.profile_picture.url }}" alt="image user">
+            </div>
+            <div class="info-container margin-vertical">
+                    <p class="text">{{ element.mail }} </p>
+            </div>
+            <box-icon  hx-get="{% url 'removeUser' element %}"
+                           hx-trigger="click"
+                       name='x' color='#297373' size='lg'></box-icon>
+        </div>
+        {% if forloop.counter|modulo:'2' == 0 %}
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="full-width center">
+        <div class="button">Valider</div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include "source/footer.html" %}
+{% endblock %}
+
+{% block script %}
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+{% endblock %}

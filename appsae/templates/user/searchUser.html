@@ -1,0 +1,15 @@
+{% for element in user %}
+       <a class="decoration-none hover" href="{% url 'addUser' element %}">
+        <div class="cards ">
+            <div class="image-container-search-results">
+                <img class="image-search-results" src="{{ element.profile_picture.url }}" alt="image user">
+            </div>
+            <div class="info-container">
+                <span class="field">{{ element.mail }} </span>
+            </div>
+        </div>
+       </a>
+    {% if forloop.counter != user|length %}
+        <div class="border-bottom"></div>
+    {% endif %}
+{% endfor %}
